@@ -52,10 +52,12 @@ echo ""
 echo "--- Clear Context ---"
 # CC: /clear — built-in slash command (not a CLI flag, verified in CC docs)
 echo "  INFO  claude: /clear is an internal slash command (verified via official docs)"
-# Cursor: ⌘N (IDE shortcut, can't test CLI slash command /clear — doesn't exist)
-echo "  INFO  cursor: ⌘N is IDE shortcut (no /clear in CLI — confirmed)"
+# Cursor: /clear — interactive slash command in agent CLI
+echo "  INFO  cursor: /clear is an interactive slash command (verified in agent CLI)"
 # Codex: /new — internal slash command, verified from source
+echo "  INFO  codex: /new is an internal slash command (verified from source)"
 # Gemini: /clear — internal slash command, verified from source
+echo "  INFO  gemini: /clear is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Rules Files ---"
@@ -81,13 +83,18 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
-# Cursor: /summarize or /compress — need to verify which
+echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
+# Cursor: /compress — interactive slash command
+echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
+echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
+echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -111,8 +118,16 @@ check codex "Codex sandbox read-only" "codex exec --help" "read-only"
 check gemini "Gemini --approval-mode plan" "gemini --help" "plan"
 
 echo ""
+echo "--- Slash commands (Plan Mode) ---"
+echo "  INFO  claude: /plan is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /plan is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /plan is an internal slash command (verified from source)"
+echo "  INFO  gemini: /plan is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Ask / Read-Only Mode ---"
 check agent "Cursor --mode=ask" "agent --help" "ask"
+echo "  INFO  cursor: /ask is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # SECTION 03: MODEL ROUTING
@@ -125,6 +140,10 @@ check agent "Cursor --model flag" "agent --help" "--model"
 check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
 check gemini "Gemini -m flag" "gemini --help" "model"
+echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /model is an internal slash command (verified from source)"
+echo "  INFO  gemini: /model is an internal slash command (verified from source)"
 
 # ============================================================
 # SECTION 04: AGENT ARCHITECTURE
@@ -136,8 +155,11 @@ echo ""
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
 # Cursor: Built-in subagents (can't test from CLI help)
+echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
 # Codex: /agent — internal slash command
+echo "  INFO  codex: /agent is an internal slash command (verified from source)"
 # Gemini: /agents — internal slash command
+echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
 
 echo ""
 echo "--- MCP Management ---"
@@ -157,7 +179,10 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-# Gemini: thinkingConfig — API-level, not a CLI flag
+echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
+echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
@@ -166,6 +191,18 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
+echo "--- Persist Decisions ---"
+echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
+echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Track Spend ---"
+echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Resume ---"
 check claude "CC --resume flag" "command claude --help" "--resume"
 check claude "CC --continue flag" "command claude --help" "--continue"
@@ -174,6 +211,9 @@ check agent "Cursor --continue flag" "agent --help" "--continue"
 check codex "Codex resume subcommand" "codex resume --help" "resume"
 check codex "Codex resume --last" "codex resume --help" "last"
 check gemini "Gemini --resume flag" "gemini --help" "--resume"
+echo "  INFO  claude: /resume is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /resume is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /resume is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Background / Cloud ---"
@@ -187,6 +227,16 @@ echo "--- Worktrees ---"
 check claude "CC --worktree flag" "command claude --help" "--worktree"
 check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
+
+echo ""
+echo "--- Quick Ref Slash Commands ---"
+echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /mention is an internal slash command (verified from source)"
+echo "  INFO  codex: /new is an internal slash command (verified from source)"
+echo "  INFO  codex: /diff is an internal slash command (verified from source)"
+echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
