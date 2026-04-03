@@ -194,7 +194,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="c-desc">Front-load constraints and file paths. Vague prompts cause exploring &mdash; burning tokens to find what you already know.</div>
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">"In src/auth.ts add JWT using types/auth.d.ts"</div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@file @types "Add JWT"</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@src/auth.ts "Add JWT"</div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention files + prompt</div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file + specific prompt</div></div>
       </div>
@@ -215,10 +215,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Watch, Don't Interrupt</div><span class="scope">All</span></div>
       <div class="c-desc">Each interruption re-ingests context. Queue feedback, deliver in one shot. Corrected twice and still wrong? Rewrite instructions, start fresh.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">&#x1f440; Observe &rarr; batch</div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">&#x1f440; Same</div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">Wait &rarr; reply once<br><span class="nt">Esc to cancel if needed</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Wait &rarr; reply once<br><span class="nt">Ctrl+C to cancel</span></div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">Tab to queue follow-up<br><span class="nt">Enter = mid-turn inject</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">&#x1f440; Same</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">Wait &rarr; reply once<br><span class="nt">Esc &times;2 to rewind</span></div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
     </div>
@@ -280,10 +280,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Disconnect Unused MCPs</div><span class="scope">All</span></div>
       <div class="c-desc">Every MCP injects tool schemas into context. Disable what you're not using. All four support per-server tool filtering.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">Edit .mcp.json<br><span class="nt">Deferred tools by default</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/mcp.json<br><span class="nt">or settings panel</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">enabled=false<br><span class="nt">enabled/disabled_tools</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/mcp disable<br><span class="nt">includeTools/excludeTools</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/mcp &middot; .mcp.json<br><span class="nt">Deferred tools by default</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/mcp disable &lt;server&gt;<br><span class="nt">.cursor/mcp.json</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mcp &middot; codex mcp<br><span class="nt">enabled/disabled_tools</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/mcp disable &lt;server&gt;<br><span class="nt">includeTools/excludeTools</span></div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -321,13 +321,13 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
 
-    <div class="card"><div class="c-top"><div class="c-title">Reduce Thinking Effort</div><span class="scope">CC &middot; CX &middot; GM</span></div>
+    <div class="card"><div class="c-top"><div class="c-title">Reduce Thinking Effort</div><span class="scope">All</span></div>
       <div class="c-desc">Thinking/reasoning tokens bill as output (5&times; input). Lower effort for simple tasks.</div>
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/effort &middot; auto<br><span class="nt">Opus/Sonnet 4.6 default</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">Managed internally</div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">medium daily driver<br><span class="nt">high/xhigh for hard only</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">thinkingConfig.thinkingBudget<br><span class="nt">in model config overrides</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/max-mode [on|off]<br><span class="nt">Toggle per-model max mode</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/model (set effort)<br><span class="nt">medium &rarr; high/xhigh</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/model set &lt;model&gt;<br><span class="nt">thinkingBudget in config</span></div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
     </div>
