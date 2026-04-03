@@ -36,14 +36,26 @@ Single-page static HTML site deployed on Vercel at https://token-saving-techniqu
 
 Run `./verify.sh` to check that documented CLI flags and subcommands exist in the locally installed tools. The script checks `--help` output for expected strings. Add new checks whenever a command or flag is added to the page.
 
+## Deploy Workflow
+
+1. Make changes to `index.html`
+2. Run `./verify.sh` — all checks must pass
+3. Commit and push to GitHub: `git push origin token-saving`
+4. Vercel auto-deploys from the GitHub repo
+
+The site is linked to Vercel via the GitHub integration. Pushing to `token-saving` triggers a production deployment at https://token-saving-techniques.vercel.app.
+
+Manual deploy (fallback): `vercel --prod --scope fintanmcevoy-4814s-projects`
+
 ## Tech Stack
 
 - Pure static HTML + CSS (no build step, no framework)
-- Deployed to Vercel as a static site
-- Deploy: `vercel --prod --scope fintanmcevoy-4814s-projects`
+- Deployed to Vercel via GitHub integration
+- Repo: https://github.com/fmcevoy/token-saving-techniques
 
 ## File Structure
 
 - `index.html` — the entire site (single file)
 - `verify.sh` — command/flag verification script
+- `CLAUDE.md` — content guidelines and deploy workflow
 - `.vercel/` — Vercel project config (gitignored)
