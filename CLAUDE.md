@@ -42,6 +42,9 @@ Run `./verify.sh` to check that documented CLI flags and subcommands exist in th
 2. Run `./verify.sh` — all checks must pass
 3. Commit and push to GitHub: `git push origin token-saving`
 4. Vercel auto-deploys from the GitHub repo
+5. Verify deployment landed — run: `vercel ls --scope fintanmcevoy-4814s-projects 2>&1 | head -5`
+   - Confirm the latest deployment shows **● Ready** and **Production**
+   - If status is not Ready, check `vercel inspect <deployment-url> --scope fintanmcevoy-4814s-projects` for errors
 
 The site is linked to Vercel via the GitHub integration. Pushing to `token-saving` triggers a production deployment at https://token-saving-techniques.vercel.app.
 
