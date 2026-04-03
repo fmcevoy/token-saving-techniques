@@ -69,10 +69,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
 
 <div class="hd">
   <h1>Token Saving Techniques</h1>
-  <p class="pricing">Output tokens cost <strong>5× more</strong> than input across all Claude models (Sonnet 4.6: $3 in / $15 out per MTok). Thinking tokens bill as output. Codex and Gemini show 4&times;&ndash;8&times; asymmetry. Every technique here reduces one or both.</p>
+  <p class="pricing">CLI-focused techniques for <strong>Claude Code</strong>, <strong>Cursor Agent</strong> (<code style="color:var(--cu);font-size:11px">agent</code>), <strong>Codex CLI</strong>, and <strong>Gemini CLI</strong>. Output tokens cost <strong>5&times; more</strong> than input across all Claude models (Sonnet 4.6: $3 in / $15 out per MTok). Thinking tokens bill as output. Codex and Gemini show 4&times;&ndash;8&times; asymmetry. Every technique here reduces one or both.</p>
   <div class="leg">
     <div class="leg-i"><span class="dot dot-cc"></span>Claude Code</div>
-    <div class="leg-i"><span class="dot dot-cu"></span>Cursor</div>
+    <div class="leg-i"><span class="dot dot-cu"></span>Cursor Agent CLI</div>
     <div class="leg-i"><span class="dot dot-cx"></span>Codex CLI</div>
     <div class="leg-i"><span class="dot dot-gm"></span>Gemini CLI</div>
   </div>
@@ -197,6 +197,17 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
         <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@src/auth.ts "Add JWT"</div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention files + prompt</div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file + specific prompt</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Don't Paste Large Blobs</div><span class="scope">All</span></div>
+      <div class="c-desc">Pasting full docs, logs, images, or long stack traces floods your context and gets re-sent every turn. Instead: point to files by path, pipe logs through tail/head, paste only the relevant error, and use @file references for docs. Let the agent read what it needs.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">@file &middot; | tail -20<br><span class="nt">Agent reads files on demand</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@file &middot; paste error only<br><span class="nt">Not full log / doc</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention &middot; !cmd | tail<br><span class="nt">Sandbox reads files directly</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file &middot; !cmd | tail<br><span class="nt">Agent reads files directly</span></div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
