@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Token Saving Techniques</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0c0e12;--sf:#13161c;--sf2:#1a1e26;--bd:#252a35;--tx:#e2e8f0;--mt:#64748b;--cc:#d4a574;--cu:#00b4d8;--cx:#10b981;--gm:#8b5cf6;--hi:rgba(34,211,238,0.2);--accent:#22d3ee;--warn:#fbbf24;--hot:#f87171;--g3:#34d399}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;line-height:1.5}
+.pg{max-width:1280px;margin:0 auto;padding:48px 24px 64px}
+.hd{text-align:center;margin-bottom:40px}
+h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bottom:12px;background:linear-gradient(135deg,#e2e8f0 30%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.pricing{font-size:13px;color:var(--mt);max-width:720px;margin:0 auto 16px;text-align:center;line-height:1.6}
+.pricing strong{color:var(--hot)}
+.leg{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:12px}
+.leg-i{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-cc{background:var(--cc)}.dot-cu{background:var(--cu)}.dot-cx{background:var(--cx)}.dot-gm{background:var(--gm)}
+/* sections */
+.sec{margin-bottom:40px}
+.sec-h{display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--bd);margin-bottom:16px}
+.sec-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-t{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+.sec-n{font-family:'Instrument Serif',serif;font-size:28px;color:var(--mt);opacity:.3;margin-left:auto}
+/* cards */
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:18px 20px;transition:border-color .2s}
+.card:hover{border-color:var(--hi)}
+.c-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.c-title{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#fff}
+.scope{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1px;padding:2px 7px;border-radius:3px;text-transform:uppercase;margin-left:auto;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
+.c-desc{font-size:12px;color:var(--mt);line-height:1.6;margin-bottom:12px}
+/* 4-col grid */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--bd);border-radius:6px;overflow:hidden}
+.g4-c{padding:10px 12px;background:var(--bg);border-right:1px solid var(--bd)}
+.g4-c:last-child{border-right:none}
+.g4-l{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.g4-l.lcc{color:var(--cc)}.g4-l.lcu{color:var(--cu)}.g4-l.lcx{color:var(--cx)}.g4-l.lgm{color:var(--gm)}
+.cmd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g3);line-height:1.7}
+.na{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mt);opacity:.4;font-style:italic}
+.nt{color:var(--mt);font-size:9px}
+.p{color:var(--mt)}
+/* impact */
+.imp{margin-top:10px;display:flex;align-items:center;gap:6px}
+.imp-l{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--mt);text-transform:uppercase;letter-spacing:1px;flex-shrink:0}
+.imp-t{flex:1;height:3px;background:var(--sf2);border-radius:2px;overflow:hidden}
+.imp-f{height:100%;border-radius:2px}
+.imp-h{background:var(--g3);width:90%}.imp-m{background:var(--warn);width:60%}
+/* callout */
+.call{background:linear-gradient(135deg,rgba(34,211,238,.05),rgba(167,139,250,.05));border:1px solid rgba(34,211,238,.15);border-radius:12px;padding:22px 24px;margin:32px 0;display:flex;gap:14px;align-items:flex-start}
+.call-ico{font-size:22px;flex-shrink:0;margin-top:2px}
+.call-t{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;margin-bottom:4px;color:var(--accent)}
+.call-tx{font-size:12px;color:var(--mt);line-height:1.6}
+/* model grid */
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:12px}
+.mc{background:var(--sf);border:1px solid var(--bd);border-radius:8px;padding:14px;text-align:center}
+.mc-n{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;margin-bottom:3px}
+.mc-r{font-size:11px;color:var(--mt);margin-bottom:8px;line-height:1.4}
+.mc-tag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:10px;display:inline-block}
+.footer{text-align:center;margin-top:44px;padding-top:20px;border-top:1px solid var(--bd);font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mt);letter-spacing:1px}
+@media(max-width:800px){.g4{grid-template-columns:1fr 1fr}.g4-c:nth-child(2){border-right:none}.g4-c:nth-child(3),.g4-c:nth-child(4){border-top:1px solid var(--bd)}}
+@media(max-width:500px){.g4{grid-template-columns:1fr}.g4-c{border-right:none!important;border-bottom:1px solid var(--bd)}.g4-c:last-child{border-bottom:none}}
+</style>
+</head>
+<body>
+<div class="pg">
+
+<div class="hd">
+  <h1>Token Saving Techniques</h1>
+  <p class="pricing">Output tokens cost <strong>5× more</strong> than input across all Claude models (Sonnet 4.6: $3 in / $15 out per MTok). Thinking tokens bill as output. Codex and Gemini show 4&times;&ndash;8&times; asymmetry. Every technique here reduces one or both.</p>
+  <div class="leg">
+    <div class="leg-i"><span class="dot dot-cc"></span>Claude Code</div>
+    <div class="leg-i"><span class="dot dot-cu"></span>Cursor</div>
+    <div class="leg-i"><span class="dot dot-cx"></span>Codex CLI</div>
+    <div class="leg-i"><span class="dot dot-gm"></span>Gemini CLI</div>
+  </div>
+</div>
+
+<!-- 01 CONTEXT HYGIENE -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(34,211,238,.1);color:var(--accent)">&#x1f9f9;</div><div class="sec-t">Context Hygiene</div><div class="sec-n">01</div></div>
+  <div class="cards">
+
+    <div class="card"><div class="c-top"><div class="c-title">Clear Context Between Tasks</div><span class="scope">All</span></div>
+      <div class="c-desc">Reset when switching tasks. Stale context re-sends every turn.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd"><span class="p">/</span>clear</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd"><span class="p">/</span>clear</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd"><span class="p">/</span>new</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd"><span class="p">/</span>clear</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Keep Your Rules File Lean</div><span class="scope">All</span></div>
+      <div class="c-desc">Injected every prompt. Every line is a per-turn tax &times; session length. Anthropic: keep CLAUDE.md under 200 lines. Cursor: glob-scoped .mdc files load only when matched. Gemini: hierarchical GEMINI.md with imports.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE.md<br><span class="nt">&lt;200 lines</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/*.mdc<br><span class="nt">Glob-scoped</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md<br><span class="nt">Dir-scoped overrides</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">GEMINI.md<br><span class="nt">Hierarchical + @imports</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Surgical File References</div><span class="scope">All</span></div>
+      <div class="c-desc">Point to specific files &mdash; don't dump whole directories.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">@file &middot; /add-dir</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@file</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention &middot; --add-dir</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Exclude Irrelevant Files</div><span class="scope">All</span></div>
+      <div class="c-desc">Block noisy dirs from being read. Each tool has its own mechanism.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">permissions.deny<br><span class="nt">.claude/settings.json<br>--disallowed-tools</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursorignore</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">-s read-only<br><span class="nt">--add-dir for writable paths</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">.geminiignore<br><span class="nt">+ .gitignore respected</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Compact Before Hitting the Limit</div><span class="scope">All</span></div>
+      <div class="c-desc">Summarise conversation to free tokens. All four support manual + auto compaction.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/compact [instructions]<br><span class="nt">Auto ~83%. Check /context</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/compress<br><span class="nt">Manual + auto at limit</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/compact<br><span class="nt">Remote /responses/compact</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/compress<br><span class="nt">Replaces context w/ summary</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Tame Command Output Bloat</div><span class="scope">All</span></div>
+      <div class="c-desc">Pipe through tail/head. Delegate verbose tasks to subagents. Paste only errors, not full logs.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">| tail -30<br><span class="nt">Or delegate to subagent</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Agent reads terminal<br><span class="nt">Auto-truncates long output</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">!cmd | tail -30</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">!cmd | tail -30<br><span class="nt">Shell output enters context</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Mind the Prompt Cache TTL</div><span class="scope">CC</span></div>
+      <div class="c-desc">Claude Code cached reads cost <strong>10% of input price</strong>. 5-min default TTL. Cache miss = full re-read at full price. <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)">Docs &rarr;</a></div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">&#9201; 5-min TTL<br><span class="nt">Cache = 10% of input</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">Managed internally</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="na">Responses API caching</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd"><span class="nt">/stats shows cached tokens<br>(API key auth only)</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">&#x1f514; Enable Completion Sounds</div><span class="scope">All</span></div>
+      <div class="c-desc">Audio notifications free you from watching the terminal. Different sounds for "done" vs "needs approval". Prevents cache timeouts &mdash; you hear the bell, respond promptly, cache stays warm.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">preferredNotifChannel<br><span class="nt">in ~/.claude.json + hooks</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd"><span class="nt">IDE notifications built-in</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">BEL + OSC9 auto-detect<br><span class="nt">/statusline to configure</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">enableNotifications<br><span class="nt">BEL + OSC9 auto-detect</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 02 PROMPTING STRATEGY -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(167,139,250,.1);color:#a78bfa">&#x1f3af;</div><div class="sec-t">Prompting Strategy</div><div class="sec-n">02</div></div>
+  <div class="cards">
+
+    <div class="card"><div class="c-top"><div class="c-title">Use Plan Mode First</div><span class="scope">All</span></div>
+      <div class="c-desc">Read-only analysis before coding. Uses fewer tokens. Prevents trial-and-error loops. Gemini CLI enables Plan Mode by default since v0.34.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/plan &middot; Shift+Tab &times;2<br><span class="nt">--permission-mode plan</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/plan &middot; Shift+Tab</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/plan<br><span class="nt">-a untrusted from CLI</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/plan<br><span class="nt">On by default (v0.34+)</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Feed Precise Context</div><span class="scope">All</span></div>
+      <div class="c-desc">Front-load constraints and file paths. Vague prompts cause exploring &mdash; burning tokens to find what you already know.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">"In src/auth.ts add JWT using types/auth.d.ts"</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@file @types "Add JWT"</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention files + prompt</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file + specific prompt</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Batch Related Changes</div><span class="scope">All</span></div>
+      <div class="c-desc">Combine related changes in one prompt. Each turn re-sends full context &mdash; fewer turns = fewer re-reads.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">"Add validation, handler, and tests for /users"</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Same &mdash; batch prompts<br><span class="nt">&#8984;N for new chat</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">Same &middot; /new for fresh</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">Same &middot; /clear for fresh</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Watch, Don't Interrupt</div><span class="scope">All</span></div>
+      <div class="c-desc">Each interruption re-ingests context. Queue feedback, deliver in one shot. Corrected twice and still wrong? Rewrite instructions, start fresh.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">&#x1f440; Observe &rarr; batch</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">&#x1f440; Same</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">Tab to queue follow-up<br><span class="nt">Enter = mid-turn inject</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">&#x1f440; Same</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Use Ask / Read-Only Mode</div><span class="scope">All</span></div>
+      <div class="c-desc">Explore code without changes &mdash; cheaper than full agent mode.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/plan (read-only)</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/ask &middot; Shift+Tab</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/plan &middot; -a untrusted</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/plan (read-only)</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- CALLOUT -->
+<div class="call"><div class="call-ico">&#x26a1;</div><div>
+  <div class="call-t">Inspect Before You Commit</div>
+  <div class="call-tx">
+    <strong style="color:var(--cc)">Claude Code:</strong> /context &middot; /cost &nbsp;
+    <strong style="color:var(--cu)">Cursor:</strong> /usage &middot; Usage panel &nbsp;
+    <strong style="color:var(--cx)">Codex:</strong> /status &middot; /statusline &nbsp;
+    <strong style="color:var(--gm)">Gemini:</strong> /stats &middot; /stats model
+    <br>These cost almost nothing &mdash; the insight saves entire conversations.
+  </div>
+</div></div>
+
+<!-- 03 MODEL ROUTING -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(52,211,153,.1);color:var(--g3)">&#x1f500;</div><div class="sec-t">Model Routing</div><div class="sec-n">03</div></div>
+  <p style="color:var(--mt);font-size:12px;margin-bottom:14px;line-height:1.6">Use the right model for the job. All tools: <code style="color:var(--g3)">/model</code> to switch. <strong style="color:var(--cu)">Cursor:</strong> Auto Mode picks cheapest capable model &mdash; uses credits at variable rates. <strong style="color:var(--cx)">Codex:</strong> Medium reasoning effort as daily driver; high/xhigh only for hard problems. <strong style="color:var(--gm)">Gemini:</strong> Auto routing uses Flash for simple tasks, Pro for complex. 3.1 Pro in preview.</p>
+  <div class="mg">
+    <div class="mc" style="border-top:3px solid #a78bfa"><div class="mc-n" style="color:#a78bfa">Flagship</div><div class="mc-r">Opus 4.6 &middot; GPT-5.4<br>Gemini 3.1 Pro</div><div class="mc-tag" style="background:rgba(167,139,250,.1);color:#a78bfa">Complex reasoning</div></div>
+    <div class="mc" style="border-top:3px solid var(--accent)"><div class="mc-n" style="color:var(--accent)">Balanced</div><div class="mc-r">Sonnet 4.6 &middot; GPT-5.3-Codex<br>Gemini 3 Pro</div><div class="mc-tag" style="background:rgba(34,211,238,.1);color:var(--accent)">Daily driver</div></div>
+    <div class="mc" style="border-top:3px solid var(--g3)"><div class="mc-n" style="color:var(--g3)">Fast / Light</div><div class="mc-r">Haiku 4.5 &middot; GPT-5.1-Codex-mini<br>Gemini 3 Flash &middot; Auto Mode</div><div class="mc-tag" style="background:rgba(52,211,153,.1);color:var(--g3)">Subagents &middot; cheap</div></div>
+    <div class="mc" style="border-top:3px solid var(--warn)"><div class="mc-n" style="color:var(--warn)">Background</div><div class="mc-r">Codex Cloud &middot; CC background<br>Cursor &amp; &middot; gemini -p</div><div class="mc-tag" style="background:rgba(251,191,36,.1);color:var(--warn)">Offload &amp; forget</div></div>
+  </div>
+</div>
+
+<!-- 04 AGENT ARCHITECTURE -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(251,191,36,.1);color:var(--warn)">&#x1f3d7;</div><div class="sec-t">Agent Architecture</div><div class="sec-n">04</div></div>
+  <div class="cards">
+
+    <div class="card"><div class="c-top"><div class="c-title">Subagents = Fresh Context</div><span class="scope">All</span></div>
+      <div class="c-desc">Each subagent starts clean. Verbose output stays in their context. CC subagents: use cheaper models. Codex: model-dispatched via /agent. Gemini: enabled by default, JIT context discovery.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">model: sonnet<br><span class="nt">/agents &middot; YAML config</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Built-in subagents</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">Model-dispatched &middot; /agent<br><span class="nt">GPT-5.1-Codex-mini for subs</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/agents &middot; enabled default<br><span class="nt">JIT context discovery</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Disconnect Unused MCPs</div><span class="scope">All</span></div>
+      <div class="c-desc">Every MCP injects tool schemas into context. Disable what you're not using. All four support per-server tool filtering.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">Edit .mcp.json<br><span class="nt">Deferred tools by default</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/mcp.json<br><span class="nt">or settings panel</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">enabled=false<br><span class="nt">enabled/disabled_tools</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/mcp disable<br><span class="nt">includeTools/excludeTools</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Prefer Native CLIs Over MCPs</div><span class="scope">All</span></div>
+      <div class="c-desc">git, npm, docker &mdash; run directly. No tool schema overhead.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">git log --oneline -10</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Terminal commands</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">!git log --oneline</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">!git log --oneline</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Keep Plugins / Extensions Minimal</div><span class="scope">All</span></div>
+      <div class="c-desc">Every plugin, MCP server, and extension injects tool schemas and context into your window. A typical 5-server MCP setup uses tens of thousands of tokens before you type anything. Start with 3&ndash;5 that match your daily workflow. Each additional one degrades context quality. Audit with /context or /tools.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/context to audit<br><span class="nt">Tool Search defers loading</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/mcp disable &lt;server&gt;<br><span class="nt">or settings panel</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">enabled=false per server<br><span class="nt">/mcp to audit</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/tools desc to audit<br><span class="nt">/mcp disable unused</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Move Specialised Instructions to Skills</div><span class="scope">CC &middot; CX &middot; GM</span></div>
+      <div class="c-desc">Your rules file (CLAUDE.md / AGENTS.md / GEMINI.md) loads every turn. Skills load on-demand only when relevant &mdash; ~30-50 tokens per skill description vs full instructions. Move workflow-specific procedures (deployments, reviews, migrations) into skills to keep base context small. Use <code>disable-model-invocation: true</code> for skills you only want to trigger manually.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">.claude/skills/*/SKILL.md<br><span class="nt">~30-50 tok per skill desc<br>1% context budget cap</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No skill system<br><span class="nt">Use glob-scoped .mdc rules</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">.codex/skills/*/SKILL.md<br><span class="nt">Agent Skills standard</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">.gemini/skills/<br><span class="nt">JIT context discovery</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Reduce Thinking Effort</div><span class="scope">CC &middot; CX &middot; GM</span></div>
+      <div class="c-desc">Thinking/reasoning tokens bill as output (5&times; input). Lower effort for simple tasks.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/effort &middot; auto<br><span class="nt">Opus/Sonnet 4.6 default</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">Managed internally</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">medium daily driver<br><span class="nt">high/xhigh for hard only</span></div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">thinkingConfig.thinkingBudget<br><span class="nt">in model config overrides</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Tab / Inline Edits for Small Tasks</div><span class="scope">Cursor</span></div>
+      <div class="c-desc">Tab completions = unlimited (Pro+). &#8984;K = lean inline edit. Reserve Agent for multi-step tasks.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="na">CLI-based</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Tab &middot; &#8984;K inline</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="na">CLI-based</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="na">CLI-based</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 05 COST -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(248,113,113,.1);color:var(--hot)">&#x1f4b0;</div><div class="sec-t">Cost &amp; Limit Management</div><div class="sec-n">05</div></div>
+  <div class="cards">
+
+    <div class="card"><div class="c-top"><div class="c-title">Persist Decisions &amp; Learnings</div><span class="scope">All</span></div>
+      <div class="c-desc">Without this, next session re-derives everything from scratch.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE.md &middot; /memory</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md &middot; /resume</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">GEMINI.md &middot; /memory add</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Track Spend Per Session</div><span class="scope">All</span></div>
+      <div class="c-desc">Know your burn rate. tokscale tracks all four tools from one CLI.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/cost</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/usage</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/status &middot; /statusline</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/stats &middot; /stats model</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Offload to Background / Cloud</div><span class="scope">All</span></div>
+      <div class="c-desc">Don't burn interactive tokens on batch work.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">Background agents</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">&amp; &rarr; Cloud Agent</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">codex exec (local)</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">gemini -p headless</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Resume Instead of Rebuilding</div><span class="scope">All</span></div>
+      <div class="c-desc">Resume a previous session with full transcript instead of re-explaining from scratch.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/resume</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/resume<br><span class="nt">CLI + chat history sidebar</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">codex resume --last</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/resume &middot; gemini -r<br><span class="nt">Checkpoints via /chat save</span></div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+    <div class="card"><div class="c-top"><div class="c-title">Schedule Around Peak Hours</div><span class="scope">CC</span></div>
+      <div class="c-desc">Claude Code rate limits tighter 8 AM&ndash;2 PM ET (reported). No public docs for other tools.</div>
+      <div class="g4">
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">&#x1f550; Peak: 8am&ndash;2pm ET</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No public docs</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="na">No public docs</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="na">5&ndash;15 RPM free tier</div></div>
+      </div>
+      <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- META RULE -->
+<div class="call"><div class="call-ico">&#x1f9e0;</div><div>
+  <div class="call-t">The Meta-Rule</div>
+  <div class="call-tx">Every token is re-read every turn. A 50-line rules file across a 20-turn session is read <strong>20 times</strong> &mdash; 1,000 lines from one file. Context isn't cost-per-message, it's <strong>cost &times; conversation length</strong>. Keep it tight, clear often, persist decisions, use the cheapest mode that works.</div>
+</div></div>
+
+<!-- QUICK REF -->
+<div class="sec">
+  <div class="sec-h"><div class="sec-ico" style="background:rgba(100,116,139,.15);color:var(--mt)">&#x2328;</div><div class="sec-t">Quick Command Reference</div><div class="sec-n">&#8984;</div></div>
+  <div class="g4" style="border-radius:10px">
+    <div class="g4-c" style="padding:16px">
+      <div class="g4-l lcc" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cc"></span>Claude Code</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /compact &middot; /cost</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>context &middot; /plan &middot; /effort</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /memory &middot; /resume</div>
+      <div class="cmd" style="margin-bottom:6px">permissions.deny</div>
+      <div class="cmd">Shift+Tab &middot; preferredNotifChannel</div>
+    </div>
+    <div class="g4-c" style="padding:16px">
+      <div class="g4-l lcu" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cu"></span>Cursor</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /plan &middot; /ask</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /compress &middot; /resume</div>
+      <div class="cmd" style="margin-bottom:6px">@file &middot; &amp; msg &rarr; cloud</div>
+      <div class="cmd" style="margin-bottom:6px">.cursor/rules/ &middot; .cursorignore</div>
+      <div class="cmd">/mcp &middot; /usage</div>
+    </div>
+    <div class="g4-c" style="padding:16px">
+      <div class="g4-l lcx" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cx"></span>Codex CLI</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>new &middot; /compact &middot; /status</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /statusline &middot; /diff</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>mention &middot; /agent &middot; /review</div>
+      <div class="cmd" style="margin-bottom:6px">AGENTS.md &middot; codex resume</div>
+      <div class="cmd">!cmd &middot; Tab (queue)</div>
+    </div>
+    <div class="g4-c" style="padding:16px">
+      <div class="g4-l lgm" style="font-size:10px;margin-bottom:10px"><span class="dot dot-gm"></span>Gemini CLI</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /compress &middot; /stats</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>plan &middot; /model &middot; /memory</div>
+      <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>mcp &middot; /agents &middot; @file</div>
+      <div class="cmd" style="margin-bottom:6px">GEMINI.md &middot; .geminiignore</div>
+      <div class="cmd">!cmd &middot; /resume &middot; /skills</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">TOKEN SAVING TECHNIQUES &middot; CLAUDE CODE &middot; CURSOR &middot; CODEX CLI &middot; GEMINI CLI &middot; APRIL 2026</div>
+
+</div>
+</body>
+</html>
