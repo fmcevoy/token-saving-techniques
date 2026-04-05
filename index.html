@@ -138,10 +138,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Compact Before Hitting the Limit</div><span class="scope">All</span></div>
       <div class="c-desc">Summarise conversation to free tokens. All four support manual + auto compaction.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/compact [instructions]<br><span class="nt">Auto ~83%. Check /context</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/compress<br><span class="nt">Manual + auto at limit</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/compact<br><span class="nt">Remote /responses/compact</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/compress<br><span class="nt">Replaces context w/ summary</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">/compact</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">/compress</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/compact</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">/compress</div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
     </div>
@@ -172,7 +172,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="c-desc">Audio notifications free you from watching the terminal. Different sounds for "done" vs "needs approval". Prevents cache timeouts &mdash; you hear the bell, respond promptly, cache stays warm.</div>
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">~/.claude.json</div><div class="flag">preferredNotifChannel</div><span class="nt">Set to "terminal_bell"</span></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No CLI config (unconfirmed)</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No CLI config available</div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/statusline</div><span class="nt">Terminal bell on completion</span></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">~/.gemini/settings.json</div><div class="flag">enableNotifications</div><span class="nt">Terminal bell on completion</span></div>
       </div>
@@ -201,10 +201,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Feed Precise Context</div><span class="scope">All</span></div>
       <div class="c-desc">Front-load constraints and file paths. Vague prompts cause exploring &mdash; burning tokens to find what you already know.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">"In src/auth.ts add JWT using types/auth.d.ts"</div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@src/auth.ts "Add JWT"</div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention files + prompt</div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file + specific prompt</div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><span class="nt">"In src/auth.ts add JWT<br>using types/auth.d.ts"</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><span class="nt">@src/auth.ts "Add JWT"</span></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><span class="nt">/mention files + prompt</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><span class="nt">@file + specific prompt</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -223,7 +223,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Batch Related Changes</div><span class="scope">All</span></div>
       <div class="c-desc">Combine related changes in one prompt. Each turn re-sends full context &mdash; fewer turns = fewer re-reads.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">"Add validation, handler, and tests for /users"</div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><span class="nt">"Add validation, handler,<br>and tests for /users"</span></div>
         <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">Same &mdash; batch prompts</div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">Same &mdash; batch prompts</div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">Same &mdash; batch prompts</div></div>
@@ -414,7 +414,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     </div>
 
     <div class="card"><div class="c-top"><div class="c-title">Schedule Around Peak Hours</div><span class="scope">CC</span></div>
-      <div class="c-desc">Claude Code rate limits tighter 8 AM&ndash;2 PM ET (reported). No public docs for other tools.</div>
+      <div class="c-desc">Rate limits can be tighter during peak hours.</div>
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">&#x1f550; Peak: 8am&ndash;2pm ET</div></div>
         <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No public docs</div></div>
