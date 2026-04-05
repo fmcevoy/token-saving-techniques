@@ -39,6 +39,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
 .g4-l{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:4px}
 .g4-l.lcc{color:var(--cc)}.g4-l.lcu{color:var(--cu)}.g4-l.lcx{color:var(--cx)}.g4-l.lgm{color:var(--gm)}
 .cmd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g3);line-height:1.7}
+.flag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);line-height:1.7}
 .na{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mt);opacity:.4;font-style:italic}
 .nt{color:var(--mt);font-size:9px}
 .p{color:var(--mt)}
@@ -76,6 +77,11 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="leg-i"><span class="dot dot-cx"></span>Codex CLI</div>
     <div class="leg-i"><span class="dot dot-gm"></span>Gemini CLI</div>
   </div>
+  <div class="leg" style="margin-top:8px;gap:16px">
+    <div class="leg-i"><span style="color:var(--g3);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">/slash commands</span></div>
+    <div class="leg-i"><span style="color:var(--accent);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">--flags &amp; env vars</span></div>
+    <div class="leg-i"><span style="color:var(--mt);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">config &amp; notes</span></div>
+  </div>
 </div>
 
 <!-- 01 CONTEXT HYGIENE -->
@@ -110,7 +116,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">@file &middot; /add-dir</div></div>
         <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">@file</div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention &middot; --add-dir</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/mention</div><div class="flag">--add-dir</div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">@file</div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
@@ -387,7 +393,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Cap Context Window &amp; Thinking Budget</div><span class="scope">CC</span></div>
       <div class="c-desc">The 1M context window re-sends up to 750K tokens every turn. Adaptive thinking burns output tokens at 5&times; input price. Tune both via env vars. <a href="https://code.claude.com/docs/en/env-vars" style="color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent)">Docs &rarr;</a></div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE_CODE_DISABLE_1M_CONTEXT=1<br>CLAUDE_CODE_AUTO_COMPACT_WINDOW=50000<br>CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1<br>MAX_THINKING_TOKENS=&lt;n&gt;<br><span class="nt">Add to .zshrc / .bashrc</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="flag">CLAUDE_CODE_DISABLE_1M_CONTEXT=1<br>CLAUDE_CODE_AUTO_COMPACT_WINDOW=50000<br>CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING=1<br>MAX_THINKING_TOKENS=&lt;n&gt;</div><span class="nt">Add to .zshrc / .bashrc</span></div>
         <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No equivalent</div></div>
         <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="na">No equivalent</div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="na">No equivalent</div></div>
@@ -448,7 +454,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /memory &middot; /resume</div>
       <div class="cmd" style="margin-bottom:6px">permissions.deny</div>
       <div class="cmd" style="margin-bottom:6px">Shift+Tab &middot; preferredNotifChannel</div>
-      <div class="cmd">hooks &middot; CLAUDE_CODE_*</div>
+      <div class="cmd">hooks</div><div class="flag">CLAUDE_CODE_*</div>
     </div>
     <div class="g4-c" style="padding:16px">
       <div class="g4-l lcu" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cu"></span>Cursor Agent CLI</div>
