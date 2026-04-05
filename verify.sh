@@ -184,6 +184,13 @@ echo "  INFO  cursor: /max-mode is an interactive slash command (verified in age
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
+echo ""
+echo "--- Hooks ---"
+echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
+echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
+echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
+echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
+
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
 # ============================================================
@@ -191,6 +198,13 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
+echo "--- Context Window & Thinking Env Vars ---"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
 echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
