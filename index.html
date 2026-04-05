@@ -171,10 +171,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">&#x1f514; Enable Completion Sounds</div><span class="scope">All</span></div>
       <div class="c-desc">Audio notifications free you from watching the terminal. Different sounds for "done" vs "needs approval". Prevents cache timeouts &mdash; you hear the bell, respond promptly, cache stays warm.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">preferredNotifChannel<br><span class="nt">in ~/.claude.json + hooks</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd"><span class="nt">IDE notifications built-in</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">BEL + OSC9 auto-detect<br><span class="nt">/statusline to configure</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">enableNotifications<br><span class="nt">BEL + OSC9 auto-detect</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">~/.claude.json</div><div class="flag">preferredNotifChannel</div><span class="nt">Set to "terminal_bell"</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">Built-in notifications</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">/statusline</div><span class="nt">BEL + OSC9 auto-detect</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">~/.gemini/settings.json</div><div class="flag">enableNotifications</div><span class="nt">BEL + OSC9 auto-detect</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
     </div>
