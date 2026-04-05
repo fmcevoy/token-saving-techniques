@@ -40,6 +40,7 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
 .g4-l.lcc{color:var(--cc)}.g4-l.lcu{color:var(--cu)}.g4-l.lcx{color:var(--cx)}.g4-l.lgm{color:var(--gm)}
 .cmd{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--g3);line-height:1.7}
 .flag{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);line-height:1.7}
+.file{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--warn);line-height:1.7}
 .na{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mt);opacity:.4;font-style:italic}
 .nt{color:var(--mt);font-size:9px}
 .p{color:var(--mt)}
@@ -80,7 +81,8 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
   <div class="leg" style="margin-top:8px;gap:16px">
     <div class="leg-i"><span style="color:var(--g3);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">/slash commands</span></div>
     <div class="leg-i"><span style="color:var(--accent);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">--flags &amp; env vars</span></div>
-    <div class="leg-i"><span style="color:var(--mt);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">config &amp; notes</span></div>
+    <div class="leg-i"><span style="color:var(--warn);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">files &amp; config paths</span></div>
+    <div class="leg-i"><span style="color:var(--mt);font-size:10px">&#x25CF;</span> <span style="font-size:10px;color:var(--mt)">notes</span></div>
   </div>
 </div>
 
@@ -103,10 +105,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Keep Your Rules File Lean</div><span class="scope">All</span></div>
       <div class="c-desc">Your rules file is re-read on every turn. A 200-line file across a 20-turn session costs 4,000 lines of input. Keep it short &mdash; move workflows to skills, use scoped rules, and split by directory.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE.md<br><span class="nt">Keep under 200 lines<br>Move workflows to skills</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/*.mdc<br><span class="nt">Each .mdc targets specific<br>files (e.g. *.tsx) &mdash; skipped<br>unless you touch those files</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md<br><span class="nt">Put one per directory &mdash;<br>child dirs see parent rules<br>plus their own additions</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">GEMINI.md<br><span class="nt">@import to split files<br>Hierarchical inheritance</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">CLAUDE.md</div><span class="nt">Keep under 200 lines<br>Move workflows to skills</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="file">.cursor/rules/*.mdc</div><span class="nt">Each .mdc targets specific<br>files (e.g. *.tsx) &mdash; skipped<br>unless you touch those files</span></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">AGENTS.md</div><span class="nt">Put one per directory &mdash;<br>child dirs see parent rules<br>plus their own additions</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">GEMINI.md</div><span class="nt">@import to split files<br>Hierarchical inheritance</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -123,12 +125,12 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     </div>
 
     <div class="card"><div class="c-top"><div class="c-title">Exclude Irrelevant Files</div><span class="scope">All</span></div>
-      <div class="c-desc">Block noisy dirs from being read. Each tool has its own mechanism.</div>
+      <div class="c-desc">Stop the agent from reading noisy directories (node_modules, build output, logs). Each tool uses a config file to define what's excluded.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">permissions.deny<br><span class="nt">.claude/settings.json<br>--disallowed-tools</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursorignore</div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">sandbox_permissions<br><span class="nt">Restrict tool access in config</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">.geminiignore<br><span class="nt">+ .gitignore respected</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">.claude/settings.json</div><span class="nt">permissions.deny list</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="file">.cursorignore</div><span class="nt">Same syntax as .gitignore</span></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">~/.codex/config.toml</div><span class="nt">sandbox_permissions list</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">.geminiignore</div><span class="nt">.gitignore also respected</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-m"></div></div></div>
     </div>
@@ -330,10 +332,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Move Specialised Instructions to Skills</div><span class="scope">CC &middot; CX &middot; GM</span></div>
       <div class="c-desc">Your rules file (CLAUDE.md / AGENTS.md / GEMINI.md) loads every turn. Skills load on-demand only when relevant &mdash; ~30-50 tokens per skill description vs full instructions. Move workflow-specific procedures (deployments, reviews, migrations) into skills to keep base context small. Use <code>disable-model-invocation: true</code> for skills you only want to trigger manually.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">.claude/skills/*/SKILL.md<br><span class="nt">~30-50 tok per skill desc<br>1% context budget cap</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No skill system<br><span class="nt">Use glob-scoped .mdc rules</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">.codex/skills/*/SKILL.md<br><span class="nt">Agent Skills standard</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">.gemini/skills/<br><span class="nt">JIT context discovery</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">.claude/skills/*/SKILL.md</div><span class="nt">~30-50 tok per skill desc<br>1% context budget cap</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No skill system</div><span class="nt">Use glob-scoped .mdc rules</span></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">.codex/skills/*/SKILL.md</div><span class="nt">Agent Skills standard</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">.gemini/skills/</div><span class="nt">JIT context discovery</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -352,10 +354,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Automate With Hooks</div><span class="scope">All</span></div>
       <div class="c-desc">Hooks run shell commands on agent events &mdash; block expensive tool calls, filter verbose output, trigger early compaction. All four CLIs support them.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">hooks in settings.json<br><span class="nt">PreCompact &middot; PreToolUse<br>30+ events &middot; 4 hook types</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/hooks.json<br><span class="nt">beforeShellExecution<br>beforeReadFile &middot; afterFileEdit</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">.codex/hooks.json<br><span class="nt">PreToolUse &middot; PostToolUse<br>5 events &middot; command type</span></div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">hooks in settings.json<br><span class="nt">PreCompress &middot; BeforeTool<br>11 events &middot; migrate from CC</span></div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">.claude/settings.json</div><span class="nt">PreCompact &middot; PreToolUse<br>30+ events &middot; 4 hook types</span></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="file">.cursor/hooks.json</div><span class="nt">beforeShellExecution<br>beforeReadFile &middot; afterFileEdit</span></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">.codex/hooks.json</div><span class="nt">PreToolUse &middot; PostToolUse<br>5 events &middot; command type</span></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">.gemini/settings.json</div><span class="nt">PreCompress &middot; BeforeTool<br>11 events &middot; migrate from CC</span></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -371,10 +373,10 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
     <div class="card"><div class="c-top"><div class="c-title">Persist Decisions &amp; Learnings</div><span class="scope">All</span></div>
       <div class="c-desc">Without this, next session re-derives everything from scratch.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE.md &middot; /memory</div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/</div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md &middot; /resume</div></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">GEMINI.md &middot; /memory add</div></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">CLAUDE.md</div><div class="cmd">/memory</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="file">.cursor/rules/</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">AGENTS.md</div><div class="cmd">/resume</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">GEMINI.md</div><div class="cmd">/memory add</div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
@@ -452,33 +454,36 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /compact &middot; /cost</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>context &middot; /plan &middot; /effort</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /memory &middot; /resume</div>
-      <div class="cmd" style="margin-bottom:6px">permissions.deny</div>
-      <div class="cmd" style="margin-bottom:6px">Shift+Tab &middot; preferredNotifChannel</div>
-      <div class="cmd">hooks</div><div class="flag">CLAUDE_CODE_*</div>
+      <div class="file" style="margin-bottom:6px">permissions.deny</div>
+      <div class="cmd" style="margin-bottom:6px">Shift+Tab</div>
+      <div class="file" style="margin-bottom:6px">hooks</div><div class="flag">CLAUDE_CODE_*</div>
     </div>
     <div class="g4-c" style="padding:16px">
       <div class="g4-l lcu" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cu"></span>Cursor Agent CLI</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /plan &middot; /ask</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /compress &middot; /resume</div>
       <div class="cmd" style="margin-bottom:6px">@file &middot; &amp; msg &rarr; cloud</div>
-      <div class="cmd" style="margin-bottom:6px">.cursor/rules/ &middot; .cursorignore</div>
-      <div class="cmd">/mcp &middot; /usage &middot; hooks.json</div>
+      <div class="file" style="margin-bottom:6px">.cursor/rules/ &middot; .cursorignore</div>
+      <div class="cmd" style="margin-bottom:6px">/mcp &middot; /usage</div>
+      <div class="file">hooks.json</div>
     </div>
     <div class="g4-c" style="padding:16px">
       <div class="g4-l lcx" style="font-size:10px;margin-bottom:10px"><span class="dot dot-cx"></span>Codex CLI</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>new &middot; /compact &middot; /status</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>model &middot; /statusline &middot; /diff</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>mention &middot; /agent &middot; /review</div>
-      <div class="cmd" style="margin-bottom:6px">AGENTS.md &middot; codex resume</div>
-      <div class="cmd">!cmd &middot; Tab &middot; hooks.json</div>
+      <div class="file" style="margin-bottom:6px">AGENTS.md</div>
+      <div class="cmd" style="margin-bottom:6px">!cmd &middot; Tab</div>
+      <div class="file">hooks.json</div>
     </div>
     <div class="g4-c" style="padding:16px">
       <div class="g4-l lgm" style="font-size:10px;margin-bottom:10px"><span class="dot dot-gm"></span>Gemini CLI</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>clear &middot; /compress &middot; /stats</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>plan &middot; /model &middot; /memory</div>
       <div class="cmd" style="margin-bottom:6px"><span class="p">/</span>mcp &middot; /agents &middot; @file</div>
-      <div class="cmd" style="margin-bottom:6px">GEMINI.md &middot; .geminiignore</div>
-      <div class="cmd">!cmd &middot; /resume &middot; hooks</div>
+      <div class="file" style="margin-bottom:6px">GEMINI.md &middot; .geminiignore</div>
+      <div class="cmd" style="margin-bottom:6px">!cmd &middot; /resume</div>
+      <div class="file">hooks</div>
     </div>
   </div>
 </div>
