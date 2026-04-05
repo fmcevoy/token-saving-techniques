@@ -328,13 +328,13 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
 
-    <div class="card"><div class="c-top"><div class="c-title">Move Specialised Instructions to Skills</div><span class="scope">CC &middot; CX &middot; GM</span></div>
-      <div class="c-desc">Your rules file (CLAUDE.md / AGENTS.md / GEMINI.md) loads every turn. Skills load on-demand only when relevant &mdash; ~30-50 tokens per skill description vs full instructions. Move workflow-specific procedures (deployments, reviews, migrations) into skills to keep base context small. Use <code>disable-model-invocation: true</code> for skills you only want to trigger manually.</div>
+    <div class="card"><div class="c-top"><div class="c-title">Use Skills</div><span class="scope">All</span></div>
+      <div class="c-desc">Skills load on-demand instead of every turn. Move workflows into skills to keep base context small.</div>
       <div class="g4">
-        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">.claude/skills/*/SKILL.md</div><span class="nt">~30-50 tok per skill desc<br>1% context budget cap</span></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="na">No skill system</div><span class="nt">Use glob-scoped .mdc rules</span></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">.codex/skills/*/SKILL.md</div><span class="nt">Agent Skills standard</span></div>
-        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">.gemini/skills/</div><span class="nt">JIT context discovery</span></div>
+        <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="file">.claude/skills/*/SKILL.md</div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="file">.cursor/skills/</div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="file">.codex/skills/*/SKILL.md</div></div>
+        <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="file">.gemini/skills/</div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
     </div>
