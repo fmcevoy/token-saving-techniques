@@ -98,8 +98,8 @@ h1{font-family:'Instrument Serif',serif;font-size:44px;font-weight:400;margin-bo
       <div class="c-desc">Your rules file is re-read on every turn. A 200-line file across a 20-turn session costs 4,000 lines of input. Keep it short &mdash; move workflows to skills, use scoped rules, and split by directory.</div>
       <div class="g4">
         <div class="g4-c"><div class="g4-l lcc"><span class="dot dot-cc"></span>Claude Code</div><div class="cmd">CLAUDE.md<br><span class="nt">Keep under 200 lines<br>Move workflows to skills</span></div></div>
-        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/*.mdc<br><span class="nt">Glob-scoped: only loads<br>when file pattern matches</span></div></div>
-        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md<br><span class="nt">Per-directory overrides<br>Subdirs inherit + extend</span></div></div>
+        <div class="g4-c"><div class="g4-l lcu"><span class="dot dot-cu"></span>Cursor</div><div class="cmd">.cursor/rules/*.mdc<br><span class="nt">Each .mdc targets specific<br>files (e.g. *.tsx) &mdash; skipped<br>unless you touch those files</span></div></div>
+        <div class="g4-c"><div class="g4-l lcx"><span class="dot dot-cx"></span>Codex</div><div class="cmd">AGENTS.md<br><span class="nt">Put one per directory &mdash;<br>child dirs see parent rules<br>plus their own additions</span></div></div>
         <div class="g4-c"><div class="g4-l lgm"><span class="dot dot-gm"></span>Gemini</div><div class="cmd">GEMINI.md<br><span class="nt">@import to split files<br>Hierarchical inheritance</span></div></div>
       </div>
       <div class="imp"><span class="imp-l">Impact</span><div class="imp-t"><div class="imp-f imp-h"></div></div></div>
