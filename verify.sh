@@ -95,6 +95,8 @@ echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
 echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+check claude "CC --exclude-dynamic-system-prompt-sections" "command claude --help" "exclude-dynamic-system-prompt-sections"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H env var (verified via code.claude.com/docs/en/changelog)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -199,9 +201,10 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+check claude "CC --strict-mcp-config flag" "command claude --help" "strict-mcp-config"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
@@ -245,11 +248,23 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
-echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /batch is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /ultraplan is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rename is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /fast is an internal slash command (verified from source)"
+echo "  INFO  codex: /clear is an internal slash command (verified from source)"
+echo "  INFO  codex: /permissions is an internal slash command (verified from source)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+echo "  INFO  gemini: /compact is an internal slash command (alias for /compress, verified from source)"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+echo "  INFO  cursor: /worktree is an interactive slash command (Cursor 3.0)"
+echo "  INFO  cursor: /best-of-n is an interactive slash command (Cursor 3.0)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /auto-run is an interactive slash command (verified in agent CLI)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
@@ -258,7 +273,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
