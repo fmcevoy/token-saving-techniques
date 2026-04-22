@@ -82,13 +82,13 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
-# CC: /compact — internal slash command (confirmed in CC docs)
-echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# CC: /compact — internal slash command (confirmed in CC docs). Accepts custom instructions.
+echo "  INFO  claude: /compact [instructions] is an internal slash command (verified via official docs)"
+# Cursor: /summarize — interactive slash command (official per changelog 1-6)
+echo "  INFO  cursor: /summarize is an interactive slash command (verified via cursor.com/changelog/1-6)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
-# Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
+# Gemini: /compress — confirmed from source (docs/reference/commands.md)
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
@@ -100,6 +100,17 @@ echo ""
 echo "--- Completion Sounds ---"
 check_file "CC ~/.claude.json (preferredNotifChannel)" "$HOME/.claude.json"
 # Codex: /statusline — internal slash command
+
+echo ""
+echo "--- Side Questions (/btw, /side) ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs — code.claude.com/docs/en/interactive-mode)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+echo "  INFO  codex: /side is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  gemini: no equivalent side question command"
+
+echo ""
+echo "--- Prompt Cache TTL ---"
+echo "  INFO  claude: 5-min TTL default, 1-hour TTL opt-in via ENABLE_PROMPT_CACHING_1H (verified from platform.claude.com/docs)"
 
 # ============================================================
 # SECTION 02: PROMPTING STRATEGY
@@ -141,9 +152,15 @@ check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
 check gemini "Gemini -m flag" "gemini --help" "model"
 echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
-echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /models is an interactive slash command (verified via cursor.com/changelog/cli-jan-08-2026)"
 echo "  INFO  codex: /model is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Model Aliases ---"
+echo "  INFO  claude: opusplan alias — Opus plans, Sonnet executes (verified at code.claude.com/docs/en/model-config)"
+echo "  INFO  claude: /advisor — Sonnet executes, Opus advises (verified at claude.com/blog/the-advisor-strategy)"
+echo "  INFO  gemini: plan.modelRouting — Pro plans, Flash executes (verified from docs/cli/plan-mode.md)"
 
 # ============================================================
 # SECTION 04: AGENT ARCHITECTURE
@@ -201,8 +218,13 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_OUTPUT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/changelog v2.1.108)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -243,6 +265,12 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- Fork / Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source — v0.27.0 release)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -251,6 +279,18 @@ echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  claude: /advisor is an internal slash command (verified via claude.com/blog/the-advisor-strategy)"
+echo "  INFO  claude: /stats is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+echo "  INFO  cursor: /debug is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+echo "  INFO  cursor: /config is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+echo "  INFO  codex: /side is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  codex: /fast is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  codex: /clear is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source — v0.27.0)"
+echo "  INFO  gemini: /hooks is an internal slash command (verified from source — docs/reference/commands.md)"
+echo "  INFO  gemini: /agents is an internal slash command (verified from source — docs/reference/commands.md)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
