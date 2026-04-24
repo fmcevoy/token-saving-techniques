@@ -54,8 +54,8 @@ echo "--- Clear Context ---"
 echo "  INFO  claude: /clear is an internal slash command (verified via official docs)"
 # Cursor: /clear — interactive slash command in agent CLI
 echo "  INFO  cursor: /clear is an interactive slash command (verified in agent CLI)"
-# Codex: /new — internal slash command, verified from source
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
+# Codex: /clear — internal slash command, verified from source
+echo "  INFO  codex: /clear is an internal slash command (verified from source)"
 # Gemini: /clear — internal slash command, verified from source
 echo "  INFO  gemini: /clear is an internal slash command (verified from source)"
 
@@ -180,7 +180,7 @@ echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
-echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /config is an interactive slash command for model choices (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
@@ -212,7 +212,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
-echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: token tracking via web dashboard at cursor.com/settings"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
@@ -246,7 +246,7 @@ echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
+echo "  INFO  codex: /clear is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
