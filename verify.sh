@@ -92,9 +92,16 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Cap Output & Read Sizes ---"
+echo "  INFO  claude: CLAUDE_CODE_MAX_OUTPUT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
 echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+check claude "CC --exclude-dynamic-system-prompt-sections" "command claude --help" "exclude-dynamic-system-prompt"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -141,6 +148,7 @@ check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
 check gemini "Gemini -m flag" "gemini --help" "model"
 echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
+echo "  INFO  claude: opusplan model alias (verified at code.claude.com/docs/en/model-config)"
 echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model is an internal slash command (verified from source)"
@@ -177,11 +185,16 @@ echo "--- Skills ---"
 check gemini "Gemini skills subcommand" "gemini --help" "skills"
 
 echo ""
+echo "--- Subagent Model ---"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL (verified at code.claude.com/docs/en/model-config)"
+
+echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
+check claude "CC --effort xhigh level" "command claude --help" "xhigh"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
+echo "  INFO  codex: Alt+, / Alt+. for effort (verified from source v0.124.0)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
@@ -203,6 +216,16 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
+echo "--- Budget Cap ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+
+echo ""
+echo "--- Undo / Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source)"
+echo "  INFO  gemini: /restore and /rewind are internal slash commands (verified from source)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -243,6 +266,19 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- New Quick Ref Commands ---"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /skills is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in cursor changelog 1.6)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in cursor changelog)"
+echo "  INFO  cursor: /multitask is an interactive slash command (verified in cursor changelog 3.2)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source)"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+echo "  INFO  gemini: /hooks is an internal slash command (verified from source)"
+echo "  INFO  gemini: /restore is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -258,7 +294,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
