@@ -93,8 +93,10 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 5-min default TTL, 1-hour opt-in — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min default TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H for 1-hour TTL (verified at code.claude.com/docs/en/model-config)"
+check claude "CC --exclude-dynamic-system-prompt-sections flag" "command claude --help" "exclude-dynamic-system-prompt"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -154,12 +156,13 @@ echo ""
 
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified at code.claude.com/docs/en/model-config)"
 # Cursor: Built-in subagents (can't test from CLI help)
 echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
 # Codex: /agent — internal slash command
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
-# Gemini: /agents — internal slash command
-echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
+# Gemini: /agents — internal slash command, built-in agents: codebase_investigator, cli_help, generalist
+echo "  INFO  gemini: /agents slash command + built-in agents (verified from GitHub docs)"
 
 echo ""
 echo "--- MCP Management ---"
@@ -179,10 +182,12 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+check claude "CC --effort supports xhigh" "command claude --help" "xhigh"
+echo "  INFO  claude: /effort is an internal slash command with interactive slider (verified via official docs)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL env var (verified at code.claude.com/docs/en/model-config)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
-echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  gemini: thinkingLevel in settings.json for Gemini 3 models (verified from source)"
 
 echo ""
 echo "--- Hooks ---"
@@ -211,7 +216,8 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command — merged /cost + /stats (verified at code.claude.com/docs/en/whats-new/2026-w16)"
+echo "  INFO  claude: /recap is an internal slash command (verified at code.claude.com/docs/en/whats-new/2026-w16)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -220,6 +226,7 @@ echo ""
 echo "--- Resume ---"
 check claude "CC --resume flag" "command claude --help" "--resume"
 check claude "CC --continue flag" "command claude --help" "--continue"
+check claude "CC --fork-session flag" "command claude --help" "--fork-session"
 check agent "Cursor --resume flag" "agent --help" "--resume"
 check agent "Cursor --continue flag" "agent --help" "--continue"
 check codex "Codex resume subcommand" "codex resume --help" "resume"
