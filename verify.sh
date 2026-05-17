@@ -84,11 +84,11 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize — interactive slash command (added in Cursor 1.6)
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI changelog 1.6)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
-# Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
+# Gemini: /compress — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
@@ -141,9 +141,14 @@ check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
 check gemini "Gemini -m flag" "gemini --help" "model"
 echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
+echo "  INFO  claude: opusplan model alias (verified at code.claude.com/docs/en/model-config)"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified at code.claude.com/docs/en/model-config)"
 echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: Auto mode unlimited on paid plans (verified at cursor.com/pricing)"
 echo "  INFO  codex: /model is an internal slash command (verified from source)"
+echo "  INFO  codex: /fast toggle (verified at developers.openai.com/codex/cli/slash-commands)"
 echo "  INFO  gemini: /model is an internal slash command (verified from source)"
+echo "  INFO  gemini: Auto model routing via Flash-Lite classifier (verified from GitHub discussion #12375)"
 
 # ============================================================
 # SECTION 04: AGENT ARCHITECTURE
@@ -199,10 +204,12 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_OUTPUT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+check claude "CC --effort flag includes xhigh" "command claude --help" "xhigh"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,7 +218,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (merged /cost + /stats, verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -258,7 +265,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
