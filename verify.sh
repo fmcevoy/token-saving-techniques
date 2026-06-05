@@ -95,6 +95,8 @@ echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
 echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H=1 for 1-hour TTL (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -141,8 +143,11 @@ check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
 check gemini "Gemini -m flag" "gemini --help" "model"
 echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
+echo "  INFO  claude: Opus 4.8 available (verified at code.claude.com/docs/en/model-config)"
 echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model is an internal slash command (verified from source)"
+echo "  INFO  codex: GPT-5.5 default model (verified from source — models.json)"
+echo "  INFO  codex: GPT-5.4-mini available (verified from source — models.json)"
 echo "  INFO  gemini: /model is an internal slash command (verified from source)"
 
 # ============================================================
@@ -203,16 +208,22 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_OUTPUT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
 echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+echo "  INFO  gemini: /memory inbox is an internal slash command (verified from source — docs/cli/auto-memory.md)"
+echo "  INFO  gemini: experimental.autoMemory setting (verified from source — docs/cli/settings.md)"
 
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
-echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
+echo "  INFO  claude: /usage shows per-component breakdown (verified at code.claude.com/docs/en/costs)"
+echo "  INFO  cursor: /usage + Context Usage Breakdown (verified at cursor.com/changelog/05-06-26)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
@@ -245,12 +256,21 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /goal is an internal slash command (verified at code.claude.com/docs/en/goal)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /rules is an interactive slash command (verified at cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: .cursorindexingignore (verified at cursor.com/docs/reference/ignore-file)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  codex: /archive is an internal slash command (verified from source — slash_command.rs)"
+echo "  INFO  codex: 10 hook events (verified from source — protocol.rs HookEventName enum)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
-echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /memory inbox is an internal slash command (verified from source — docs/cli/auto-memory.md)"
+echo "  INFO  gemini: model.compressionThreshold default 0.5 (verified from source — docs/cli/settings.md)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +278,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
