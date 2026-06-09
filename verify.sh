@@ -52,10 +52,10 @@ echo ""
 echo "--- Clear Context ---"
 # CC: /clear — built-in slash command (not a CLI flag, verified in CC docs)
 echo "  INFO  claude: /clear is an internal slash command (verified via official docs)"
-# Cursor: /clear — interactive slash command in agent CLI
-echo "  INFO  cursor: /clear is an interactive slash command (verified in agent CLI)"
-# Codex: /new — internal slash command, verified from source
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
+# Cursor: /new-chat — interactive slash command in agent CLI
+echo "  INFO  cursor: /new-chat is an interactive slash command (verified via cursor.com/docs/cli/reference/slash-commands)"
+# Codex: /clear and /new — internal slash commands, verified from source
+echo "  INFO  codex: /clear and /new are internal slash commands (verified from source)"
 # Gemini: /clear — internal slash command, verified from source
 echo "  INFO  gemini: /clear is an internal slash command (verified from source)"
 
@@ -84,8 +84,8 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize — interactive slash command (replaces /compress)
+echo "  INFO  cursor: /summarize is an interactive slash command (verified via cursor.com/docs/cli/reference/slash-commands)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -207,7 +207,7 @@ echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/e
 echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
-echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+echo "  INFO  gemini: /memory show and /memory reload are internal slash commands (verified from source)"
 
 echo ""
 echo "--- Track Spend ---"
@@ -245,10 +245,17 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /multitask is an interactive slash command (verified via cursor.com/docs)"
+echo "  INFO  cursor: /new-chat is an interactive slash command (verified via cursor.com/docs)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified via cursor.com/docs)"
+echo "  INFO  codex: /clear is an internal slash command (verified from source)"
+echo "  INFO  codex: /side and /btw are internal slash commands (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source)"
+echo "  INFO  codex: /hooks is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
@@ -258,7 +265,7 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+check_file_optional "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
