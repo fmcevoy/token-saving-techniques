@@ -243,6 +243,23 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- New Commands (June 2026) ---"
+echo "  INFO  claude: /goal is an internal slash command (verified via code.claude.com/docs/en/goal)"
+echo "  INFO  claude: /cd is an internal slash command (verified via code.claude.com/docs/en/commands, v2.1.169+)"
+echo "  INFO  claude: /batch is a bundled skill (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: /fork is an internal slash command (verified via code.claude.com/docs/en/commands, v2.1.161+)"
+echo "  INFO  claude: /workflows is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: /usage is an alias for /cost (verified via code.claude.com/docs/en/commands)"
+check claude "CC --safe-mode flag" "command claude --help" "safe-mode"
+check claude "CC --fallback-model flag" "command claude --help" "fallback-model"
+echo "  INFO  cursor: /btw is an interactive slash command (verified from cursor.com/changelog/04-14-26)"
+echo "  INFO  cursor: /debug is an interactive slash command (verified from cursor.com/changelog/04-14-26)"
+echo "  INFO  cursor: /multitask is an interactive slash command (verified from cursor.com/changelog/04-24-26)"
+echo "  INFO  codex: /goal is an internal slash command (verified from openai.com/index/codex-for-every-role-tool-workflow)"
+echo "  INFO  codex: /btw (alias /side) is an internal slash command (verified from codex source)"
+echo "  INFO  gemini: /export-session is an internal slash command (verified from gemini-cli v0.43.0 release notes)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -258,7 +275,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
