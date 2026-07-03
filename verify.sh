@@ -84,12 +84,17 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize — interactive slash command (confirmed in cursor.com/docs/cli/reference/slash-commands)
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in cursor.com/docs/cli/reference/slash-commands)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via code.claude.com/docs/en/whats-new)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from github.com/google-gemini/gemini-cli)"
 
 echo ""
 echo "--- Prompt Cache ---"
@@ -191,6 +196,13 @@ echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
 echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
 echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
 
+echo ""
+echo "--- Auto Model Routing ---"
+echo "  INFO  claude: fallbackModel in settings.json (verified at code.claude.com/docs/en/whats-new v2.1.166)"
+echo "  INFO  cursor: Auto model exempt from Token Rate surcharge (verified at cursor.com/help/models-and-usage/token-rate)"
+echo "  INFO  codex: auto-suggests GPT-5.4 mini at 90% usage (verified at developers.openai.com/codex/models)"
+echo "  INFO  gemini: /model auto switches to Flash after /plan approval (verified at github.com/google-gemini/gemini-cli/pull/23885)"
+
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
 # ============================================================
@@ -203,18 +215,27 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: DISABLE_NON_ESSENTIAL_MODEL_CALLS (verified via GitHub Gist v2.1.104)"
+echo "  INFO  codex: model_reasoning_effort in config.toml (verified at developers.openai.com/codex/config-advanced)"
+echo "  INFO  codex: model_auto_compact_token_limit in config.toml (verified at developers.openai.com/codex/config-reference)"
 
 echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /goal is an internal slash command (verified at developers.openai.com/codex/changelog)"
 echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+echo "  INFO  gemini: 4-tier memory system (verified via github.com/google-gemini/gemini-cli/discussions/26216)"
 
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified at code.claude.com/docs/en/whats-new v2.1.143)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /status is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified at developers.openai.com/codex/changelog v0.140.0)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+echo "  INFO  gemini: /context is a visual context breakdown (verified via github.com/google-gemini/gemini-cli/issues/23165)"
 
 echo ""
 echo "--- Resume ---"
@@ -258,7 +279,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
