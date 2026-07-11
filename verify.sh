@@ -92,9 +92,13 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Cross-User Cache Reuse ---"
+check claude "CC --exclude-dynamic-system-prompt-sections" "command claude --help" "exclude-dynamic-system-prompt-sections"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h TTL (subscription) / 5-min (API key) — verified from Anthropic pricing docs + code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1h TTL subscription, 5-min API key (verified from official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -201,8 +205,10 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING — no-op on Sonnet 5/Opus 4.7+/Fable 5 (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: FORCE_PROMPT_CACHING_5M / ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,7 +217,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage (/cost is now an alias) is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
