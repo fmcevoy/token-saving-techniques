@@ -92,9 +92,17 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Strip Down on Startup ---"
+check claude "CC --bare flag" "command claude --help" "--bare"
+check claude "CC --safe-mode flag" "command claude --help" "--safe-mode"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h TTL (subscribers), 5-min (API key) — verified from CC docs
+echo "  INFO  claude: prompt cache 10% / 1h TTL subscribers / 5-min API key (verified from CC docs)"
+echo "  INFO  claude: /cd is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -128,6 +136,11 @@ echo ""
 echo "--- Ask / Read-Only Mode ---"
 check agent "Cursor --mode=ask" "agent --help" "ask"
 echo "  INFO  cursor: /ask is an interactive slash command (verified in agent CLI)"
+
+echo ""
+echo "--- Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw and /side are interactive slash commands (verified in cursor changelog)"
 
 # ============================================================
 # SECTION 03: MODEL ROUTING
@@ -177,16 +190,20 @@ echo "--- Skills ---"
 check gemini "Gemini skills subcommand" "gemini --help" "skills"
 
 echo ""
+echo "--- Plugins / Extensions ---"
+echo "  INFO  gemini: extensions system (--extensions / -e flag, /extensions reload command, verified from source)"
+
+echo ""
 echo "--- Thinking Effort ---"
-check claude "CC --effort flag" "command claude --help" "effort"
+check claude "CC --effort flag (xhigh)" "command claude --help" "xhigh"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
-echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  codex: model_reasoning_effort and plan_mode_reasoning_effort in config.toml (verified from source)"
+echo "  INFO  gemini: general.plan.modelRouting auto-routes Flash vs Pro (verified from source)"
 
 echo ""
 echo "--- Hooks ---"
-echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
+echo "  INFO  claude: hooks in settings.json — 5 hook types: command, http, mcp_tool, prompt, agent (verified via official docs)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
 echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
 echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
@@ -201,8 +218,20 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  codex: rollout_token_budget in config.toml (verified from source PRs)"
+echo "  INFO  codex: tool_output_token_limit in config.toml (verified from source)"
+echo "  INFO  gemini: experimental.contextManagement settings (verified from source docs)"
+echo "  INFO  gemini: model.compressionThreshold setting (verified from source docs)"
+
+echo ""
+echo "--- Hard Cost Caps ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+echo "  INFO  codex: rollout_token_budget in config.toml (verified from source)"
+echo "  INFO  gemini: billing.overageStrategy setting (verified from source docs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -213,7 +242,7 @@ echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage (daily/weekly/cumulative), /status, /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -258,7 +287,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
