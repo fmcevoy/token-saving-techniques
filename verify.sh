@@ -185,6 +185,12 @@ echo "  INFO  codex: /model (set effort) is an internal slash command (verified 
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
+echo "--- New CC Flags (July 2026) ---"
+check claude "CC --bare flag" "command claude --help" "--bare"
+check claude "CC --safe-mode flag" "command claude --help" "--safe-mode"
+check claude "CC --exclude-dynamic-system-prompt-sections" "command claude --help" "--exclude-dynamic-system-prompt-sections"
+
+echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
@@ -201,8 +207,10 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_ATTRIBUTION_HEADER (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -245,11 +253,21 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /batch is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /advisor is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in cursor docs)"
+echo "  INFO  cursor: /rules is an interactive slash command (verified in cursor docs)"
+echo "  INFO  cursor: /commands is an interactive slash command (verified in cursor docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from releases)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+echo "  INFO  gemini: /directory is an internal slash command (verified from source)"
+echo "  INFO  gemini: /init is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
@@ -258,7 +276,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
