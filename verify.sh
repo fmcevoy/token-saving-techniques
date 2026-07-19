@@ -245,12 +245,29 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs — code.claude.com/docs/en/whats-new/2026-w29)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs — code.claude.com/docs/en/whats-new/2026-w20)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs — code.claude.com/docs/en/best-practices)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
+echo "  INFO  codex: /effort is an internal slash command (verified from official docs — developers.openai.com/codex/cli/slash-commands)"
+echo "  INFO  codex: /fast is an internal slash command (verified from official docs)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: service_tier = flex (verified from official docs — developers.openai.com/codex/config-reference)"
+echo "  INFO  codex: tool_output_token_limit (verified from official docs — developers.openai.com/codex/config-reference)"
+echo "  INFO  codex: model_reasoning_summary (verified from official docs — developers.openai.com/codex/config-reference)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  gemini: compressionThreshold (verified from github.com/google-gemini/gemini-cli docs/reference/configuration.md)"
+echo "  INFO  gemini: contextManagement.tools.distillation (verified from github.com/google-gemini/gemini-cli docs/reference/configuration.md)"
+echo "  INFO  gemini: -m auto routing (verified from github.com/google-gemini/gemini-cli docs/cli/cli-reference.md)"
+echo "  INFO  gemini: thinkingBudget in custom aliases (verified from github.com/google-gemini/gemini-cli docs/reference/configuration.md)"
+echo "  INFO  gemini: maxSessionTurns (verified from github.com/google-gemini/gemini-cli docs/reference/configuration.md)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /multitask (verified from cursor.com/changelog/2-4)"
+echo "  INFO  cursor: /worktree (verified from cursor.com/changelog/3-0)"
+echo "  INFO  cursor: /auto-run (verified from cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: Dynamic Context Discovery (verified from cursor.com/blog/dynamic-context-discovery)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +275,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
