@@ -93,8 +93,10 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1-hour TTL for subscribers, 5-min for API — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1-hour TTL (subscribers) / 5-min (API) (verified from code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  codex: 30-min cache TTL for GPT-5.6 / 90% discount (verified from openai.com/api/pricing)"
+echo "  INFO  gemini: implicit caching 10% / enabled by default for 2.5+ (verified from google-gemini.github.io/gemini-cli/docs/cli/token-caching.html)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -241,6 +243,13 @@ echo "--- Worktrees ---"
 check claude "CC --worktree flag" "command claude --help" "--worktree"
 check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
+
+echo ""
+echo "--- Doctor / Fork / Fast ---"
+check claude "CC doctor subcommand" "command claude --help" "doctor"
+check claude "CC --fork-session flag" "command claude --help" "--fork-session"
+echo "  INFO  claude: /doctor is an internal slash command (verified via official docs — code.claude.com/docs/en/whats-new/2026-w28)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs — code.claude.com/docs/en/whats-new/2026-w29)"
 
 echo ""
 echo "--- Quick Ref Slash Commands ---"
