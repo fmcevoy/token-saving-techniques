@@ -179,7 +179,8 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /effort is an internal slash command (verified via official docs — code.claude.com/docs/en/model-config)"
+echo "  INFO  claude: ultracode effort level (verified via official docs — code.claude.com/docs/en/model-config)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
@@ -199,10 +200,12 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION (verified at code.claude.com/docs/en/changelog v2.1.212)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION (verified at code.claude.com/docs/en/changelog v2.1.212)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  gemini: compressionThreshold, historyWindow.maxTokens (verified at github.com/google-gemini/gemini-cli docs/reference/configuration.md)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -212,6 +215,8 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs — code.claude.com/docs/en/costs)"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -258,7 +263,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
