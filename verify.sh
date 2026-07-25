@@ -177,6 +177,12 @@ echo "--- Skills ---"
 check gemini "Gemini skills subcommand" "gemini --help" "skills"
 
 echo ""
+echo "--- Bare Mode ---"
+check claude "CC --bare flag" "command claude --help" "--bare"
+check claude "CC --max-budget-usd flag" "command claude --help" "--max-budget-usd"
+check claude "CC --exclude-dynamic-system-prompt-sections" "command claude --help" "--exclude-dynamic-system-prompt-sections"
+
+echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
@@ -258,7 +264,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
