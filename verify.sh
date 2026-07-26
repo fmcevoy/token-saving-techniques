@@ -93,8 +93,23 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1hr subscription / 5-min API TTL — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1hr sub TTL / 5-min API TTL (verified from code.claude.com/docs/en/prompt-caching)"
+# CX: 90% cache discount on GPT-5.6 — verified from openai.com pricing
+echo "  INFO  codex: 90% cache discount on GPT-5.6 (verified from openai.com pricing)"
+# GM: token caching for API key & Vertex AI — verified from gemini-cli docs/cli/token-caching.md
+echo "  INFO  gemini: token caching for API key & Vertex AI (verified from gemini-cli docs/cli/token-caching.md)"
+
+echo ""
+echo "--- Audit Context Costs ---"
+check claude "CC doctor subcommand" "command claude --help" "doctor"
+echo "  INFO  codex: /debugconfig is an internal slash command (verified from source)"
+echo "  INFO  gemini: /skills list is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Distill Tool Output ---"
+echo "  INFO  codex: tool_output_token_limit in config.toml (verified from source codex-rs/config/src/config_toml.rs)"
+echo "  INFO  gemini: distillation.maxOutputTokens in settings.json (verified from docs/reference/configuration.md)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -212,9 +227,16 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage with per-category breakdown (verified from code.claude.com/docs/en/whats-new/2026-w21)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
-echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+echo "  INFO  codex: /status and /usage are internal slash commands (verified from source)"
+echo "  INFO  gemini: /stats with session/model/tools subcommands (verified from source)"
+
+echo ""
+echo "--- Cap Runaway Loops ---"
+echo "  INFO  claude: CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION (verified from code.claude.com/docs/en/whats-new/2026-w29)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION (verified from code.claude.com/docs/en/whats-new/2026-w29)"
+echo "  INFO  codex: limit_tokens rollout budget (verified from source codex-rs/core/src/rollout_budget.rs)"
 
 echo ""
 echo "--- Resume ---"
@@ -245,12 +267,27 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  claude: /doctor is an internal slash command (verified via official docs / whats-new/2026-w28)"
+echo "  INFO  claude: /cd is an internal slash command (verified via official docs / whats-new/2026-w24)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /models is an interactive slash command (verified from cursor.com/changelog/cli-jan-08-2026)"
+echo "  INFO  cursor: /rules is an interactive slash command (verified from cursor.com/changelog/cli-jan-08-2026)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified from cursor.com/docs/agent/chat/summarization)"
+echo "  INFO  codex: /side (/btw alias) is an internal slash command (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source)"
+echo "  INFO  codex: /skills is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
-echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from gemini-cli PR #15720)"
+echo "  INFO  gemini: /init is an internal slash command (verified from source)"
+echo "  INFO  cursor: /mcp enable|disable is an interactive command (verified from cursor.com/changelog/cli-jan-08-2026)"
+
+echo ""
+echo "--- Lazy-Load Tool Schemas ---"
+echo "  INFO  claude: deferred ToolSearch (verified via official docs)"
+echo "  INFO  cursor: Dynamic Context Discovery - 46.9% reduction (verified from cursor.com/blog/dynamic-context-discovery)"
+echo "  INFO  gemini: JIT Context Discovery (verified from gemini-cli PR #22082, default since v0.35.0)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +295,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
