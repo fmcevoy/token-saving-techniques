@@ -52,8 +52,8 @@ echo ""
 echo "--- Clear Context ---"
 # CC: /clear — built-in slash command (not a CLI flag, verified in CC docs)
 echo "  INFO  claude: /clear is an internal slash command (verified via official docs)"
-# Cursor: /clear — interactive slash command in agent CLI
-echo "  INFO  cursor: /clear is an interactive slash command (verified in agent CLI)"
+# Cursor: /new-chat — interactive slash command in agent CLI
+echo "  INFO  cursor: /new-chat is an interactive slash command (verified via cursor.com/docs)"
 # Codex: /new — internal slash command, verified from source
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 # Gemini: /clear — internal slash command, verified from source
@@ -93,8 +93,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 5-min or 1h TTL — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 5-min or 1h TTL (verified from code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H=1 for API-key 1h opt-in (verified from official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -211,7 +212,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is the canonical command; /cost is alias (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -258,7 +259,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
