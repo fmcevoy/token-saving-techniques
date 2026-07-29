@@ -199,10 +199,10 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -243,6 +243,24 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- New Claude Code Features ---"
+echo "  INFO  claude: /cd is an internal slash command (verified at code.claude.com/docs/en/changelog v2.1.169)"
+echo "  INFO  claude: /rewind is an internal slash command (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: /fork is an internal slash command (verified at code.claude.com/docs/en/changelog v2.1.212)"
+echo "  INFO  claude: /subtask is an internal slash command (verified at code.claude.com/docs/en/changelog v2.1.212)"
+echo "  INFO  claude: /recap is an internal slash command (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: /config key=value is an internal slash command (verified at code.claude.com/docs/en/changelog v2.1.181)"
+echo "  INFO  claude: two-tier cache (5-min and 1-hour) verified at code.claude.com/docs/en/prompt-caching"
+echo "  INFO  cursor: /btw is an interactive slash command (verified at cursor.com/changelog/04-14-26)"
+echo "  INFO  codex: /goal is an internal slash command (verified at developers.openai.com/codex/cli/slash-commands)"
+echo "  INFO  codex: /side is an internal slash command (verified at codex.danielvaughan.com/2026/04/21)"
+echo "  INFO  codex: /fork is an internal slash command (verified at codex knowledge base)"
+echo "  INFO  codex: hooks now have 10 events (verified at developers.openai.com/codex/hooks)"
+echo "  INFO  gemini: /extensions system (verified at github.com/google-gemini/gemini-cli/blob/main/docs/extensions)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified at github.com/google-gemini/gemini-cli commands.md)"
+echo "  INFO  gemini: /restore is an internal slash command (verified at github.com/google-gemini/gemini-cli commands.md)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -258,7 +276,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
