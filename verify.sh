@@ -2,6 +2,7 @@
 # verify.sh — Check that every command, flag, config, and file path
 # documented on the Token Saving Techniques page exists in locally installed tools.
 # Run before deploying to ensure page accuracy.
+# Note: Gemini CLI was retired June 18 2026; successor is Antigravity CLI (agy).
 
 set -uo pipefail
 
@@ -52,25 +53,25 @@ echo ""
 echo "--- Clear Context ---"
 # CC: /clear — built-in slash command (not a CLI flag, verified in CC docs)
 echo "  INFO  claude: /clear is an internal slash command (verified via official docs)"
-# Cursor: /clear — interactive slash command in agent CLI
-echo "  INFO  cursor: /clear is an interactive slash command (verified in agent CLI)"
+# Cursor: /new-chat — interactive slash command in agent CLI (replaced /clear)
+echo "  INFO  cursor: /new-chat is an interactive slash command (verified in agent CLI)"
 # Codex: /new — internal slash command, verified from source
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
-# Gemini: /clear — internal slash command, verified from source
-echo "  INFO  gemini: /clear is an internal slash command (verified from source)"
+# Antigravity (was Gemini CLI): /clear — internal slash command
+echo "  INFO  agy: /clear is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Rules Files ---"
 # CC: CLAUDE.md <200 lines — file convention
 # Cursor: .cursor/rules/*.mdc — project-level config
 # Codex: AGENTS.md — project-level config
-# Gemini: GEMINI.md with @imports — project-level config
+# Antigravity: GEMINI.md with @imports — project-level config
 
 echo ""
 echo "--- File References ---"
 check claude "CC @file / /add-dir" "command claude --help" "add-dir"
 # Codex: /mention — internal slash command
-# Gemini: @path — internal feature
+# Antigravity: @path — internal feature
 
 echo ""
 echo "--- Exclude Files ---"
@@ -78,7 +79,7 @@ check claude "CC permissions.deny in settings" "command claude --help" "permissi
 # Cursor: .cursorignore — project-level
 # Codex: writable_roots in config
 check codex "Codex sandbox policy" "codex --help" "sandbox"
-# Gemini: .geminiignore — project-level
+# Antigravity: .geminiignore — project-level
 
 echo ""
 echo "--- Compact / Summarize ---"
@@ -88,8 +89,8 @@ echo "  INFO  claude: /compact is an internal slash command (verified via offici
 echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
-# Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
-echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
+# Antigravity: /compress (aliases: /compact, /summarize) — confirmed from source
+echo "  INFO  agy: /compress is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Prompt Cache ---"
@@ -115,14 +116,14 @@ check agent "Cursor --plan shorthand" "agent --help" "--plan"
 # Codex: --ask-for-approval untrusted / /plan slash command
 check codex "Codex -a / --ask-for-approval flag" "codex --help" "ask-for-approval"
 check codex "Codex sandbox read-only" "codex exec --help" "read-only"
-check gemini "Gemini --approval-mode plan" "gemini --help" "plan"
+check agy "Antigravity --approval-mode plan" "agy --help" "plan"
 
 echo ""
 echo "--- Slash commands (Plan Mode) ---"
 echo "  INFO  claude: /plan is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /plan is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /plan is an internal slash command (verified from source)"
-echo "  INFO  gemini: /plan is an internal slash command (verified from source)"
+echo "  INFO  agy: /plan is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Ask / Read-Only Mode ---"
@@ -139,11 +140,11 @@ check claude "CC --model flag" "command claude --help" "--model"
 check agent "Cursor --model flag" "agent --help" "--model"
 check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
-check gemini "Gemini -m flag" "gemini --help" "model"
+check agy "Antigravity -m flag" "agy --help" "model"
 echo "  INFO  claude: /model is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /model is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model is an internal slash command (verified from source)"
-echo "  INFO  gemini: /model is an internal slash command (verified from source)"
+echo "  INFO  agy: /model is an internal slash command (verified from source)"
 
 # ============================================================
 # SECTION 04: AGENT ARCHITECTURE
@@ -158,8 +159,8 @@ check claude "CC --agents flag" "command claude --help" "--agents"
 echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
 # Codex: /agent — internal slash command
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
-# Gemini: /agents — internal slash command
-echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
+# Antigravity: /agents — internal slash command
+echo "  INFO  agy: /agents is an internal slash command (verified from source)"
 
 echo ""
 echo "--- MCP Management ---"
@@ -168,13 +169,13 @@ check agent "Cursor mcp disable" "agent mcp --help" "disable"
 check agent "Cursor mcp list" "agent mcp --help" "list"
 check agent "Cursor mcp list-tools" "agent mcp --help" "list-tools"
 check codex "Codex mcp subcommand" "codex mcp --help" "mcp"
-check gemini "Gemini mcp subcommand" "gemini --help" "mcp"
+check agy "Antigravity mcp subcommand" "agy --help" "mcp"
 
 echo ""
 echo "--- Skills ---"
 # CC: .claude/skills/*/SKILL.md — project-level
 # Codex: .codex/skills/*/SKILL.md — project-level
-check gemini "Gemini skills subcommand" "gemini --help" "skills"
+check agy "Antigravity skills subcommand" "agy --help" "skills"
 
 echo ""
 echo "--- Thinking Effort ---"
@@ -182,14 +183,14 @@ check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
-echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  agy: /model set is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
 echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
-echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
+echo "  INFO  agy: hooks in settings.json (verified via geminicli.com/docs/hooks)"
 
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
@@ -207,14 +208,14 @@ echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/e
 echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
-echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+echo "  INFO  agy: /memory add is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
-echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+echo "  INFO  agy: /stats is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Resume ---"
@@ -224,32 +225,39 @@ check agent "Cursor --resume flag" "agent --help" "--resume"
 check agent "Cursor --continue flag" "agent --help" "--continue"
 check codex "Codex resume subcommand" "codex resume --help" "resume"
 check codex "Codex resume --last" "codex resume --help" "last"
-check gemini "Gemini --resume flag" "gemini --help" "--resume"
+check agy "Antigravity --resume flag" "agy --help" "--resume"
 echo "  INFO  claude: /resume is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /resume is an interactive slash command (verified in agent CLI)"
-echo "  INFO  gemini: /resume is an internal slash command (verified from source)"
+echo "  INFO  agy: /resume is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Background / Cloud ---"
 check agent "Cursor --cloud flag" "agent --help" "--cloud"
 check codex "Codex exec subcommand" "codex --help" "exec"
 check codex "Codex cloud subcommand" "codex --help" "cloud"
-check gemini "Gemini --prompt headless" "gemini --help" "--prompt"
+check agy "Antigravity --prompt headless" "agy --help" "--prompt"
 
 echo ""
 echo "--- Worktrees ---"
 check claude "CC --worktree flag" "command claude --help" "--worktree"
 check agent "Cursor --worktree flag" "agent --help" "--worktree"
-check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
+check agy "Antigravity --worktree flag" "agy --help" "--worktree"
 
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
-echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  codex: /side is an internal slash command (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  agy: /rewind is an internal slash command (verified via geminicli.com/docs/cli/rewind)"
+echo "  INFO  agy: /extensions is an internal slash command (verified via geminicli.com/docs/extensions)"
+echo "  INFO  agy: /btw is an internal slash command (verified from search results)"
+echo "  INFO  agy: /codesearch is an internal slash command (verified from CHANGELOG)"
+echo "  INFO  agy: /effort is an internal slash command (verified from CHANGELOG)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
@@ -258,7 +266,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
