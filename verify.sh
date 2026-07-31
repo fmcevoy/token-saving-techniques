@@ -93,8 +93,8 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1-hr TTL on subscription / 5-min on API key — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1-hr TTL (subscription) or 5-min (API key) (verified from code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -185,6 +185,15 @@ echo "  INFO  codex: /model (set effort) is an internal slash command (verified 
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Subagent Model Override ---"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
+echo "--- Cursor Router ---"
+echo "  INFO  cursor: Cursor Router (Cost/Balance/Intelligence) (verified at cursor.com/changelog/router)"
+
+echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
@@ -258,7 +267,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
