@@ -93,8 +93,12 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, two TTLs: 5-min (1.25x write) and 1-hour (2x write) — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% read / 5-min (1.25x write) or 1-hour (2x write) TTL (verified from pricing docs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H env var (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: FORCE_PROMPT_CACHING_5M env var (verified at code.claude.com/docs/en/prompt-caching)"
+# Gemini: automatic caching for API key / Vertex AI users — verified from source
+echo "  INFO  gemini: token caching automatic for API/Vertex users (verified from docs/cli/token-caching.md)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -203,6 +207,17 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL (verified at code.claude.com/docs/en/sub-agents)"
+
+echo ""
+echo "--- Audit / Doctor ---"
+echo "  INFO  claude: /doctor (alias /checkup) is an internal slash command (verified via official docs)"
+echo "  INFO  codex: codex doctor subcommand (verified from source)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,10 +226,11 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage (alias /cost) is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage, /status are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget"
 
 echo ""
 echo "--- Resume ---"
