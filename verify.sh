@@ -92,9 +92,15 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Deferred Tool Loading ---"
+check claude "CC ENABLE_TOOL_SEARCH in help" "command claude --help" "tool"
+echo "  INFO  claude: ENABLE_TOOL_SEARCH=auto defers MCP schemas (verified via official docs)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 5-min or 1-hour TTL — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min or 1-hour TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H=1 for 1-hour TTL (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -179,10 +185,18 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /effort supports low/med/high/xhigh/max (verified via official docs)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL env var (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  gemini: thinking capped at 8192 tokens (verified from source packages/core/src/config/)"
+
+echo ""
+echo "--- Auto Model Routing ---"
+check claude "CC --fallback-model flag" "command claude --help" "fallback-model"
+echo "  INFO  cursor: Cursor Router (Intelligence/Balance/Cost) announced July 22 2026"
+echo "  INFO  gemini: -m auto routes simple→Flash, complex→Pro (verified from source routing/)"
 
 echo ""
 echo "--- Hooks ---"
@@ -198,11 +212,14 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "--- Context Window & Thinking Budget ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact [auto|<n>] slash command (verified via official docs)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  codex: model_auto_compact_token_limit in config.toml (verified from source)"
+echo "  INFO  codex: [features.rollout_budget] for token budgets (verified from v0.142.0 release)"
+echo "  INFO  gemini: truncateToolOutputThreshold default 40K (verified from source)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -258,7 +275,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
