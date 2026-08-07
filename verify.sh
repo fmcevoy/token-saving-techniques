@@ -92,9 +92,14 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Rewind / Recap ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /recap is an internal slash command (verified via official docs)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 1h TTL for subscription, 5-min for API key — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 1h TTL (subscription) / 5-min (API key) (verified from Anthropic pricing docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -203,6 +208,8 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,7 +218,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs — replaces /cost)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -230,6 +237,14 @@ echo "  INFO  cursor: /resume is an interactive slash command (verified in agent
 echo "  INFO  gemini: /resume is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Spending Cap ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget"
+
+echo ""
+echo "--- Fast Mode ---"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+
+echo ""
 echo "--- Background / Cloud ---"
 check agent "Cursor --cloud flag" "agent --help" "--cloud"
 check codex "Codex exec subcommand" "codex --help" "exec"
@@ -245,6 +260,10 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /recap is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
