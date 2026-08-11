@@ -94,7 +94,7 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: prompt cache 10% / 1-hr subscription TTL / 5-min API TTL (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -198,11 +198,16 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
+echo "--- Autocompact ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+
+echo ""
+echo "--- Context Window & Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -213,7 +218,7 @@ echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage and /status are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -258,7 +263,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
