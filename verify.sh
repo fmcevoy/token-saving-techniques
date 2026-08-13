@@ -82,6 +82,7 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
 # Cursor: /compress — interactive slash command
@@ -93,8 +94,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h TTL (subscribers) / 5-min (API) — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache hit = 10% / 1h TTL (subs) / 5m (API) (verified from Anthropic pricing docs)"
+echo "  INFO  claude: 5m cache write = 1.25x base, 1h write = 2x base (verified from pricing docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -123,6 +125,12 @@ echo "  INFO  claude: /plan is an internal slash command (verified via official 
 echo "  INFO  cursor: /plan is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /plan is an internal slash command (verified from source)"
 echo "  INFO  gemini: /plan is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Side Questions (/btw, /side) ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw and /side added in v3.11 (Jul 2026) (verified via cursor.com/changelog)"
+echo "  INFO  codex: /btw and /side are internal slash commands (verified from source slash_dispatch.rs)"
 
 echo ""
 echo "--- Ask / Read-Only Mode ---"
@@ -198,11 +206,14 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
+echo "--- Context, Budget & Thinking ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (100k-1M range, verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/settings)"
+echo "  INFO  codex: model_auto_compact_token_limit (verified from source codex-rs/config/src/config_toml.rs)"
+echo "  INFO  codex: tool_output_token_limit (verified from source codex-rs/config/src/config_toml.rs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -213,6 +224,7 @@ echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /usage [daily|weekly|cumulative] (verified from source and release notes v0.140.0)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
