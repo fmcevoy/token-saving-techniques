@@ -82,8 +82,10 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
 # Cursor: /compress — interactive slash command
 echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
@@ -245,12 +247,38 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source)"
+echo "  INFO  codex: /btw and /side are internal slash commands (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  codex: /subagents is an internal slash command (verified from source)"
+echo "  INFO  cursor: /btw and /side are interactive slash commands (verified in changelog 3.11)"
+echo "  INFO  cursor: /fork is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  gemini: /memory inbox is an internal slash command (verified from source)"
+echo "  INFO  gemini: @ subagent syntax is documented (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+
+echo ""
+echo "--- New Features (Aug 2026 update) ---"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H env var (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: 1h cache TTL for subscriptions (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: /model opusplan alias (verified at code.claude.com/docs/en/model-config)"
+echo "  INFO  claude: fork subagents inherit parent cache (verified from changelog v2.1.232)"
+echo "  INFO  cursor: Cursor Router auto-routing (verified at cursor.com/blog/router)"
+echo "  INFO  cursor: Dynamic MCP tool discovery (verified at cursor.com/blog/dynamic-context-discovery)"
+echo "  INFO  gemini: Plan mode auto model routing Pro→Flash (verified from docs/cli/plan-mode.md)"
+echo "  INFO  gemini: Local Gemma model routing (verified from docs/core/local-model-routing.md)"
+echo "  INFO  gemini: Progressive skill disclosure (verified from docs/cli/skills.md)"
+echo "  INFO  gemini: enableToolOutputTruncation (verified from changelog)"
+echo "  INFO  gemini: 4-tier memory system (verified from docs/cli discussions)"
+echo "  INFO  codex: GPT-5.6 Sol/Terra/Luna models (verified from source models.json)"
+echo "  INFO  codex: /goal token budget (verified from source goal/api.rs)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +286,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
