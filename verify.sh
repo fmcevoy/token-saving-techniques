@@ -186,10 +186,22 @@ echo "  INFO  gemini: /model set is an internal slash command (verified from sou
 
 echo ""
 echo "--- Hooks ---"
-echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
+echo "  INFO  claude: hooks in settings.json — 5 handler types (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
 echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
-echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
+echo "  INFO  gemini: hooks in settings.json — /hooks interactive cmd (verified via github.com/google-gemini/gemini-cli)"
+
+echo ""
+echo "--- Forked Subagents (CC) ---"
+echo "  INFO  claude: /fork and /subtask — forked subagents inherit parent cache (verified via code.claude.com/docs)"
+echo "  INFO  claude: /recap — display-only summary, no cache touch (verified via code.claude.com/docs)"
+echo "  INFO  claude: /rewind — roll back to cached prefix (verified via code.claude.com/docs)"
+
+echo ""
+echo "--- Gemini Skills ---"
+echo "  INFO  gemini: /skills (list/enable/disable/reload) — progressive disclosure (verified via github.com/google-gemini/gemini-cli)"
+echo "  INFO  gemini: /extensions (install/list/update) — not plugins (verified via github.com/google-gemini/gemini-cli)"
+echo "  INFO  gemini: contextManagement settings block (verified via github.com/google-gemini/gemini-cli)"
 
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
@@ -198,11 +210,13 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
+echo "--- Context Window & Compaction Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW range 100K-1M (verified at code.claude.com/docs/en/env-vars)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+check claude "CC --effort flag (xhigh)" "command claude --help" "xhigh"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
