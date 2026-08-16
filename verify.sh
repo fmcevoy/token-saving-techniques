@@ -92,9 +92,22 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Auto-Compact Threshold ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+echo "  INFO  codex: model_auto_compact_token_limit in config.toml (verified from source)"
+echo "  INFO  gemini: model.compressionThreshold in settings.json (verified from docs)"
+
+echo ""
+echo "--- Cap Tool Output ---"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH env var (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  codex: tool_output_token_limit in config.toml (verified from source)"
+echo "  INFO  gemini: tools.truncateToolOutputThreshold in settings.json (verified from docs)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h TTL (subscription), 5-min TTL (API key) — verified from Anthropic docs
+echo "  INFO  claude: prompt cache 10% / 1h TTL (sub) or 5-min TTL (API) (verified from official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -129,6 +142,12 @@ echo "--- Ask / Read-Only Mode ---"
 check agent "Cursor --mode=ask" "agent --help" "ask"
 echo "  INFO  cursor: /ask is an interactive slash command (verified in agent CLI)"
 
+echo ""
+echo "--- Side Questions (/btw) ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in CLI changelog)"
+echo "  INFO  codex: /side (alias btw) is an internal slash command (verified from v0.133.0 release)"
+
 # ============================================================
 # SECTION 03: MODEL ROUTING
 # ============================================================
@@ -136,6 +155,7 @@ echo ""
 echo "=== 03: Model Routing ==="
 echo ""
 check claude "CC --model flag" "command claude --help" "--model"
+check claude "CC --fallback-model flag" "command claude --help" "fallback-model"
 check agent "Cursor --model flag" "agent --help" "--model"
 check agent "Cursor models subcommand" "agent --help" "models"
 check codex "Codex -m flag in exec" "codex exec --help" "model"
@@ -177,12 +197,23 @@ echo "--- Skills ---"
 check gemini "Gemini skills subcommand" "gemini --help" "skills"
 
 echo ""
+echo "--- Deferred Tool Schemas ---"
+echo "  INFO  claude: deferred tools on by default, ENABLE_TOOL_SEARCH env var (verified via official docs)"
+echo "  INFO  codex: MCP tool search on by default v0.143+ (verified from release notes)"
+
+echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Subagent Model Routing ---"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  codex: agents.default_subagent_model in config.toml (verified from source)"
+echo "  INFO  gemini: plan mode auto-routes Pro->Flash (verified from docs/cli/plan-mode.md)"
 
 echo ""
 echo "--- Hooks ---"
@@ -213,7 +244,7 @@ echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage, /status, /statusline are internal slash commands (verified from source/releases)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -258,7 +289,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
