@@ -84,8 +84,8 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize — interactive slash command (replaces /compress, May 2026)
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI changelog)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -154,8 +154,12 @@ echo ""
 
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
-# Cursor: Built-in subagents (can't test from CLI help)
-echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
+# Cursor: /multitask — interactive slash command for parallel subagents (Cursor 3.2, April 2026)
+echo "  INFO  cursor: /multitask is an interactive slash command (verified in changelog)"
+# Cursor: /side, /btw — interactive slash commands for side chats (Cursor 3.11, July 2026)
+echo "  INFO  cursor: /side and /btw are interactive slash commands (verified in changelog)"
+# Codex: /side — internal slash command (v0.122.0, April 2026)
+echo "  INFO  codex: /side is an internal slash command (verified from source/releases)"
 # Codex: /agent — internal slash command
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
 # Gemini: /agents — internal slash command
@@ -211,10 +215,16 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  cursor: /context shows context breakdown (verified in changelog, May 2026)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source, v0.140.0)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Token Budgets ---"
+echo "  INFO  codex: limit_tokens / max_goal_token_budget in config.toml (verified from source)"
+echo "  INFO  codex: get_context_remaining model tool (verified from source, June 2026)"
 
 echo ""
 echo "--- Resume ---"
@@ -258,7 +268,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
