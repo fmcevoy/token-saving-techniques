@@ -93,8 +93,10 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 5-min default TTL, 1-hour opt-in — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min default TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H=1 for 1-hour TTL (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: FORCE_PROMPT_CACHING_5M=1 to force 5-min (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -177,6 +179,21 @@ echo "--- Skills ---"
 check gemini "Gemini skills subcommand" "gemini --help" "skills"
 
 echo ""
+echo "--- Bare Mode ---"
+check claude "CC --bare flag" "command claude --help" "--bare"
+
+echo ""
+echo "--- Diagnose Context ---"
+echo "  INFO  claude: /doctor is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI docs)"
+
+echo ""
+echo "--- Autocompact ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
@@ -198,10 +215,15 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
+echo "--- Token Budgets ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
@@ -258,7 +280,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
