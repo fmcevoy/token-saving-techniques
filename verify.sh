@@ -84,8 +84,8 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize (primary), aliases /compress, /compact — Cursor 3.5+ (May 2026)
+echo "  INFO  cursor: /summarize is the primary command; /compress is alias (cursor.com/docs/cli/changelog)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -93,8 +93,8 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, two-tier TTL (5-min or 1-hour) — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / two-tier TTL (5-min or 1-hr) (verified from platform.claude.com/docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -243,12 +243,45 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- New Features (Aug 2026) ---"
+echo "  INFO  claude: /usage shows attribution breakdown (verified via code.claude.com/docs/en/costs)"
+echo "  INFO  claude: /insights generates session efficiency report (verified via code.claude.com/docs/en/costs)"
+echo "  INFO  claude: /config > Concise output style (verified via code.claude.com/docs/en/changelog v2.1.237)"
+echo "  INFO  claude: MCP tool schemas deferred by default (verified via code.claude.com/docs/en/costs)"
+echo "  INFO  claude: ENABLE_PROMPT_CACHING_1H / FORCE_PROMPT_CACHING_5M env vars (verified via code.claude.com/docs)"
+echo "  INFO  claude: ANTHROPIC_DEFAULT_MODEL env var (verified via code.claude.com/docs/en/changelog v2.1.236)"
+echo "  INFO  claude: /effort supports xhigh level (verified via platform.claude.com/docs/en/build-with-claude/effort)"
+echo "  INFO  cursor: /btw and /side commands (verified via cursor.com/changelog/04-14-26 and side-chat)"
+echo "  INFO  cursor: /summarize is primary compact command (verified via cursor.com/docs/cli/changelog)"
+echo "  INFO  cursor: /fork aliases /branch /duplicate (verified via cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: /context command (verified via cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: /automate command (verified via cursor.com/changelog/06-18-26)"
+echo "  INFO  cursor: Cursor Router auto model routing (verified via cursor.com/changelog/router)"
+echo "  INFO  codex: @mention unified picker (verified from github.com/openai/codex releases v0.131.0)"
+echo "  INFO  codex: /usage daily/weekly stats (verified from github.com/openai/codex releases v0.140.0)"
+echo "  INFO  codex: codex fork session forking (verified from github.com/openai/codex releases v0.148.0)"
+echo "  INFO  codex: /export conversation export (verified from github.com/openai/codex releases v0.148.0)"
+echo "  INFO  codex: configurable token budgets (verified from github.com/openai/codex releases v0.142.0)"
+echo "  INFO  codex: GPT-5.6 Sol/Terra/Luna models (verified from github.com/openai/codex releases v0.145.0)"
+echo "  INFO  gemini: JIT context discovery for GEMINI.md (verified from github.com/google-gemini/gemini-cli PR #22082)"
+echo "  INFO  gemini: /rewind command (verified from github.com/google-gemini/gemini-cli releases v0.26.0)"
+echo "  INFO  gemini: /stats session/model/tools subcommands (verified from gemini-cli docs/reference/commands.md)"
+echo "  INFO  gemini: /extensions system (verified from gemini-cli docs/extensions/index.md)"
+echo "  INFO  gemini: model.compressionThreshold setting (verified from gemini-cli docs/reference/configuration.md)"
+echo "  INFO  gemini: Auto model routing graduated (verified from gemini-cli docs/cli/model-routing.md)"
+
+echo ""
+echo "--- Model Updates (Aug 2026) ---"
+echo "  INFO  models: Opus 5 (\$5/\$25), Fable 5 (\$10/\$50), Sonnet 5 (\$2/\$10 permanent) (platform.claude.com/docs)"
+echo "  INFO  models: GPT-5.6 Sol/Terra/Luna replace GPT-5.4/5.3/5.1 (github.com/openai/codex releases)"
+echo "  INFO  models: Gemini 3.5 Flash/Pro available (github.com/google-gemini/gemini-cli)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
+echo "  INFO  codex: @mention unified picker replaces /mention (verified from source v0.131.0)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
@@ -258,7 +291,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) (codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
