@@ -93,8 +93,42 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1-hour TTL on subscriptions, 5-min on API keys — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1h TTL (subs) or 5-min (API key) (verified at code.claude.com/docs/en/prompt-caching)"
+
+echo ""
+echo "--- Concise Output ---"
+echo "  INFO  claude: outputStyle Concise (verified at code.claude.com/docs/en/output-styles, v2.1.237+)"
+echo "  INFO  codex: model_verbosity low/medium/high (verified from source — codex-rs/config/src/config_toml.rs)"
+
+echo ""
+echo "--- Command Output Caps ---"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH env var (verified at code.claude.com/docs/en/env-vars, default 30000, max 150000)"
+echo "  INFO  codex: tool_output_token_limit (verified from source — codex-rs/config/src/config_toml.rs)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified at code.claude.com/docs/en/prompt-caching#rewinding-the-conversation)"
+echo "  INFO  cursor: /rewind is an interactive slash command (verified via promptgarden reference)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source — packages/cli/src/ui/commands/rewindCommand.tsx)"
+
+echo ""
+echo "--- Auto Model Routing ---"
+echo "  INFO  claude: /model opusplan — Opus for plan, Sonnet for execution (verified at code.claude.com/docs/en/model-config)"
+echo "  INFO  codex: [agents] default_subagent_model in config.toml (verified from source — codex-rs/config/src/config_toml.rs)"
+echo "  INFO  gemini: general.plan.modelRouting — auto Pro/Flash (verified from source and docs/cli/settings.md)"
+
+echo ""
+echo "--- Budget Caps ---"
+check claude "CC --max-budget-usd" "command claude --help" "max-budget-usd"
+echo "  INFO  codex: max_goal_token_budget in config.toml (verified from source — codex-rs/ext/goal/)"
+echo "  INFO  gemini: billing.overageStrategy in settings.json (verified from source — packages/core/src/billing/billing.ts)"
+
+echo ""
+echo "--- /btw Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/docs changelog)"
+echo "  INFO  codex: /side and /btw are internal slash commands (verified from source — codex-rs/tui/src/slash_command.rs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -198,11 +232,12 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
+echo "--- Context Window & Compaction Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  codex: model_context_window in config.toml (verified from source — codex-rs/config/src/config_toml.rs)"
+echo "  INFO  codex: model_auto_compact_token_limit in config.toml (verified from source — codex-rs/config/src/config_toml.rs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -258,7 +293,7 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+check_file_optional "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
