@@ -154,12 +154,16 @@ echo ""
 
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
+echo "  INFO  claude: /subtask is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  claude: .claude/agents/*.md custom agent definitions (verified via official docs)"
 # Cursor: Built-in subagents (can't test from CLI help)
-echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
-# Codex: /agent — internal slash command
-echo "  INFO  codex: /agent is an internal slash command (verified from source)"
-# Gemini: /agents — internal slash command
-echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
+echo "  INFO  cursor: built-in async subagents (no CLI flag to test)"
+# Codex: /agent — internal slash command, Multi-Agent v2
+echo "  INFO  codex: /agent is an internal slash command — Multi-Agent v2 (verified from source)"
+echo "  INFO  codex: .codex/agents/*.toml custom agent definitions (verified from source)"
+# Gemini: subagents — internal feature
+echo "  INFO  gemini: @subagent_name for built-in subagents (verified from source)"
 
 echo ""
 echo "--- MCP Management ---"
@@ -199,10 +203,11 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_PROMPT_CACHE_TTL (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -244,12 +249,11 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
 echo "--- Quick Ref Slash Commands ---"
-echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
-echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  claude: /context, /usage, /autocompact, /advisor, /rewind (verified via official docs)"
+echo "  INFO  claude: /subtask, /fork, /btw (verified via official docs)"
+echo "  INFO  cursor: /summarize, /review, /sandbox, /auto-run, /automate (verified via cursor.com/docs)"
+echo "  INFO  codex: /new, /usage, /goal, /agent, /archive, /export, /import (verified from source)"
+echo "  INFO  gemini: /compress, /rewind, /memory show, /memory inbox, /skills, /init (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
@@ -258,7 +262,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: config file check (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
