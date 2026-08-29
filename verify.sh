@@ -93,8 +93,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% read, 1h/5m TTL — verified from platform.claude.com/docs/en/about-claude/pricing
+echo "  INFO  claude: prompt cache 10% read / 1h (sub) or 5m (API) TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: promptCacheTtl setting / CLAUDE_CODE_PROMPT_CACHE_TTL env var (verified from code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -198,11 +199,12 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "--- Context Window, Budget & Thinking ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH default 30000, max 150000 (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL env var (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: outputStyle 'Concise' setting (verified at code.claude.com/docs/en/output-styles)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -245,12 +247,16 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: /recap is an internal slash command (verified via code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: /context is an interactive slash command (verified via cursor.com/changelog/05-06-26)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
-echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
-echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  codex: /export is an internal slash command (verified from source v0.148.0)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source PR #15720)"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+echo "  INFO  gemini: experimental.jitContext setting (verified from source PR #22082)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +264,7 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+check_file_optional "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
