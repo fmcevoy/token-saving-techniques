@@ -82,10 +82,11 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
-# CC: /compact — internal slash command (confirmed in CC docs)
+# CC: /compact + /autocompact — internal slash commands (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+# Cursor: /summarize (primary), /compress and /compact are aliases
+echo "  INFO  cursor: /summarize is now the primary command (reported; /compress alias)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -93,8 +94,8 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 5-min or 1-hour TTL — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min or 1-hour TTL (verified from Anthropic pricing docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -152,6 +153,19 @@ echo ""
 echo "=== 04: Agent Architecture ==="
 echo ""
 
+echo "--- Goal ---"
+echo "  INFO  claude: /goal is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /goal is an internal slash command with token budgets (reported from source)"
+echo "  INFO  cursor: /goal is an interactive slash command (reported)"
+
+echo ""
+echo "--- Fork / Subagent Offload ---"
+check claude "CC --fork-session flag" "command claude --help" "fork-session"
+check claude "CC --background flag" "command claude --help" "background"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /in-cloud offloads to cloud VM (reported)"
+
+echo ""
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
 # Cursor: Built-in subagents (can't test from CLI help)
@@ -179,7 +193,8 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+check claude "CC --effort includes xhigh" "command claude --help" "xhigh"
+echo "  INFO  claude: /effort is an internal slash command with xhigh/ultracode (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
@@ -198,11 +213,11 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "--- Context Window & Token Management Env Vars ---"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: ANTHROPIC_DEFAULT_MODEL (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,7 +226,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs; /cost is alias)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -258,7 +273,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  codex: Codex config (~/.codex/config.toml) (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
