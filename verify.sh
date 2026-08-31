@@ -94,7 +94,7 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: prompt cache 10% / 5-min default TTL, 1-hour available (verified from Anthropic pricing docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -188,7 +188,7 @@ echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
-echo "  INFO  codex: .codex/hooks.json (verified via developers.openai.com/codex/hooks)"
+echo "  INFO  codex: .codex/hooks.json + config.toml (verified from source v0.124.0 — hooks stable, inline in config.toml)"
 echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/hooks)"
 
 # ============================================================
@@ -201,6 +201,7 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/changelog v2.1.243)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 
@@ -249,7 +250,10 @@ echo "  INFO  codex: /mention is an internal slash command (verified from source
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /side (/btw) is an internal slash command (verified from source)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source v0.146.0)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
