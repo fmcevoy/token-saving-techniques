@@ -93,8 +93,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, two-tier TTL (5m/1h) — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / two-tier TTL 5m+1h (verified from code.claude.com/docs/en/prompt-caching)"
+check claude "CC CLAUDE_CODE_PROMPT_CACHE_TTL env var doc" "command claude --help" "cache"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -154,11 +155,12 @@ echo ""
 
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
-# Cursor: Built-in subagents (can't test from CLI help)
-echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
-# Codex: /agent — internal slash command
+echo "  INFO  claude: /fork is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified via code.claude.com/docs/en/sub-agents)"
+echo "  INFO  cursor: /multitask spawns parallel subagents (verified in Cursor 3.2 changelog)"
+echo "  INFO  cursor: /in-cloud spawns cloud subagents (verified in Cursor 3.7 changelog)"
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
-# Gemini: /agents — internal slash command
+echo "  INFO  codex: multi-agent V2 with configurable models (verified from v0.145.0 changelog)"
 echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
 
 echo ""
@@ -185,6 +187,15 @@ echo "  INFO  codex: /model (set effort) is an internal slash command (verified 
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Advisor / Model Pairing ---"
+echo "  INFO  claude: /advisor is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: opusplan model alias (verified via code.claude.com/docs/en/model-config)"
+
+echo ""
+echo "--- Budget Caps ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+
+echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
@@ -194,6 +205,10 @@ echo "  INFO  gemini: hooks in settings.json (verified via geminicli.com/docs/ho
 # ============================================================
 # SECTION 05: COST & LIMIT MANAGEMENT
 # ============================================================
+echo ""
+echo "--- Autocompact ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+
 echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
@@ -207,7 +222,7 @@ echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/e
 echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
-echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
+echo "  INFO  gemini: /memory and /memory inbox are internal slash commands (verified from source)"
 
 echo ""
 echo "--- Track Spend ---"
@@ -243,13 +258,32 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- Plugins / Extensions ---"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source — BuiltinCommandLoader.ts)"
+echo "  INFO  gemini: extensions support install/uninstall/enable/disable/update (verified from source)"
+
+echo ""
+echo "--- Side Chats ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  cursor: /btw and /side added in Cursor 3.11 (verified from changelog)"
+echo "  INFO  codex: /side is an internal slash command (verified from source — v0.122.0)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
-echo "  INFO  codex: /mention is an internal slash command (verified from source)"
-echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
-echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  claude: /advisor is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: /fast is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  claude: /insights is an internal slash command (verified via code.claude.com/docs/en/commands)"
+echo "  INFO  cursor: /context shows context usage breakdown (verified in Cursor 3.3 changelog)"
+echo "  INFO  cursor: /multitask and /in-cloud for subagents (verified in Cursor 3.2/3.7 changelog)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source — v0.140.0)"
+echo "  INFO  codex: /side is an internal slash command (verified from source — v0.122.0)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source — v0.128.0)"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+echo "  INFO  gemini: /tools is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
