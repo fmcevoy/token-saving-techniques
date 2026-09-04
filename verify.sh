@@ -82,8 +82,8 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
-# CC: /compact — internal slash command (confirmed in CC docs)
-echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
+# CC: /compact, /autocompact — internal slash commands (confirmed in CC docs)
+echo "  INFO  claude: /compact and /autocompact are internal slash commands (verified via official docs)"
 # Cursor: /compress — interactive slash command
 echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
@@ -92,9 +92,21 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Output Caps ---"
+# CC: BASH_MAX_OUTPUT_LENGTH env var (verified at code.claude.com/docs/en/env-vars)
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH env var (verified at code.claude.com/docs/en/env-vars)"
+# Codex: tool_output_token_limit in config.toml (verified from source)
+echo "  INFO  codex: tool_output_token_limit config option (verified from GitHub source)"
+# Gemini: truncateToolOutputThreshold in settings.json (verified from source)
+echo "  INFO  gemini: truncateToolOutputThreshold setting (verified from source)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: configurable TTL (5m/1h), 1h default on subscription — verified from CC docs
+echo "  INFO  claude: prompt cache configurable TTL via promptCacheTtl setting (verified via official docs)"
+echo "  INFO  claude: CLAUDE_CODE_PROMPT_CACHE_TTL env var (verified at code.claude.com/docs/en/env-vars)"
+# Gemini: token caching for API key / Vertex AI — verified from source
+echo "  INFO  gemini: token caching for API key and Vertex AI users (verified from source)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -123,6 +135,12 @@ echo "  INFO  claude: /plan is an internal slash command (verified via official 
 echo "  INFO  cursor: /plan is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /plan is an internal slash command (verified from source)"
 echo "  INFO  gemini: /plan is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /rewind is an interactive slash command (verified in agent CLI changelog)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Ask / Read-Only Mode ---"
@@ -180,9 +198,13 @@ echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast toggle is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /fast is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
+echo "  INFO  codex: model_reasoning_effort config option (verified from GitHub source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  gemini: thinkingBudget in modelConfigs setting (verified from source)"
 
 echo ""
 echo "--- Hooks ---"
@@ -199,10 +221,30 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_MAX_CONTEXT_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
+echo "--- Subagent Model Control ---"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL_FORCE env var (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  codex: agents.default_subagent_model config option (verified from GitHub source)"
+echo "  INFO  gemini: per-subagent model override in settings.json (verified from source)"
+
+echo ""
+echo "--- Codex Token Budgets ---"
+echo "  INFO  codex: goals.max_goal_token_budget config option (verified from GitHub source)"
+echo "  INFO  codex: model_context_window config option (verified from GitHub source)"
+
+echo ""
+echo "--- Gemini Token Budgets ---"
+echo "  INFO  gemini: maxOutputTokens in modelConfigs setting (verified from source)"
+echo "  INFO  gemini: thinkingBudget in modelConfigs setting (verified from source)"
+echo "  INFO  gemini: maxSessionTurns setting (verified from source)"
+echo "  INFO  gemini: compressionThreshold setting (verified from source)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -211,9 +253,10 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage (alias /cost) is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from GitHub releases v0.140.0)"
+echo "  INFO  codex: /status shows estimated cost (verified from GitHub releases v0.148.0)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -245,10 +288,15 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from GitHub releases)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 
