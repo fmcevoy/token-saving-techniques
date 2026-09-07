@@ -81,6 +81,13 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 # Gemini: .geminiignore — project-level
 
 echo ""
+echo "--- Rewind ---"
+# CC: /rewind — internal slash command (confirmed in CC costs docs)
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs — code.claude.com/docs/en/costs)"
+# Gemini: /rewind — confirmed from source (github.com/google-gemini/gemini-cli/blob/main/docs/cli/rewind.md)
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
@@ -88,13 +95,18 @@ echo "  INFO  claude: /compact is an internal slash command (verified via offici
 echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
+# Codex: /recap — summarize now (confirmed from source codex-rs/tui/src/slash_command.rs)
+echo "  INFO  codex: /recap is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1-hr subscription / 5-min API — verified from Anthropic pricing + CC costs docs
+echo "  INFO  claude: prompt cache 10% / 1-hr subscription TTL / 5-min API TTL (verified from official docs)"
+echo "  INFO  claude: promptCacheTtl and subagentPromptCacheTtl settings (verified from CC changelog v2.1.257)"
+# Gemini: token caching only for API key / Vertex AI (not OAuth) — verified from source
+echo "  INFO  gemini: token caching only for API key / Vertex (verified from source docs/cli/token-caching.md)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -179,7 +191,7 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /effort is an internal slash command, supports xhigh (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
@@ -201,8 +213,9 @@ echo ""
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/costs)"
+echo "  INFO  claude: CLAUDE_CODE_GOAL_CHECKIN_MINUTES=0 (verified at code.claude.com/docs/en/costs)"
+echo "  INFO  claude: crossSessionInbound: hold (verified at code.claude.com/docs/en/costs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -245,12 +258,19 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs — code.claude.com/docs/en/costs)"
+echo "  INFO  claude: /diff is an internal slash command (verified via CC changelog v2.1.260)"
+echo "  INFO  claude: /skill-doctor is an internal slash command (verified via CC changelog v2.1.261)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
-echo "  INFO  codex: /diff is an internal slash command (verified from source)"
+echo "  INFO  codex: /recap is an internal slash command (verified from source codex-rs/tui/src/slash_command.rs)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source docs/cli/rewind.md)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+echo "  INFO  cursor: /statusline is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
