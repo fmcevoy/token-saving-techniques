@@ -200,9 +200,10 @@ echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: bashOutputMaxChars setting (verified at code.claude.com/docs/en/settings)"
+echo "  INFO  claude: promptCacheTtl setting (verified at code.claude.com/docs/en/settings)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -245,12 +246,16 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +263,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
