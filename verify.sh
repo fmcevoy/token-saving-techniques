@@ -84,12 +84,29 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize (aliases: /compress, /compact) — renamed in v1.6
+echo "  INFO  cursor: /summarize is the primary command; /compress is alias (verified in cursor.com/changelog v1.6)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official slash-commands docs)"
+echo "  INFO  claude: /recap is an internal slash command (verified via official prompt-caching docs)"
+echo "  INFO  codex: /fork is an internal slash command (verified from source slash_dispatch.rs)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from v0.26.0 release notes)"
+
+echo ""
+echo "--- Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  codex: /side (/btw alias) is an internal slash command (verified from source / GitHub issue #24817)"
+
+echo ""
+echo "--- Skills ---"
+echo "  INFO  claude: /skill-doctor is an internal slash command (verified via official slash-commands docs)"
+echo "  INFO  gemini: /extensions list is an internal command (verified from v0.8.0+ release notes)"
 
 echo ""
 echo "--- Prompt Cache ---"
@@ -199,10 +216,15 @@ echo "=== 05: Cost & Limit Management ==="
 echo ""
 
 echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_CODE_EFFORT_LEVEL (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/costs)"
+echo "  INFO  claude: maxEffortLevel setting (verified at code.claude.com/docs/en/settings-reference)"
+echo "  INFO  claude: autoCompactWindow setting (verified at code.claude.com/docs/en/settings-reference)"
+echo "  INFO  claude: promptCacheTtl setting (verified at code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  codex: service_tier flex (verified from codex source / GitHub issue #2916)"
+echo "  INFO  codex: model_reasoning_effort (verified from codex config reference)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -212,8 +234,11 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official costs page)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official costs page)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in cursor.com/changelog May 6, 2026)"
+echo "  INFO  codex: /status and /usage are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
