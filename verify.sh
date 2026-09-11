@@ -185,6 +185,21 @@ echo "  INFO  codex: /model (set effort) is an internal slash command (verified 
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Fast Mode ---"
+echo "  INFO  claude: /fast is an internal slash command (verified via code.claude.com/docs/en/fast-mode)"
+
+echo ""
+echo "--- Context Audit ---"
+echo "  INFO  claude: /checkup is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI)"
+
+echo ""
+echo "--- Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in agent CLI, Apr 2026)"
+
+echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
@@ -243,6 +258,10 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- Tokenizer Note ---"
+echo "  INFO  claude: 4.7+ tokenizer ~30% more tokens (verified from platform.claude.com/docs/en/about-claude/pricing)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -251,6 +270,11 @@ echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /checkup is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
