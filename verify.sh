@@ -205,6 +205,15 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.cl
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
+echo "--- Budget Caps ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL_FORCE (verified at code.claude.com/docs/en/env-vars)"
+
+echo ""
+echo "--- Fast Mode ---"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs — code.claude.com/docs/en/fast-mode)"
+
+echo ""
 echo "--- Persist Decisions ---"
 echo "  INFO  claude: /memory is an internal slash command (verified via official docs)"
 echo "  INFO  gemini: /memory add is an internal slash command (verified from source)"
@@ -258,7 +267,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
