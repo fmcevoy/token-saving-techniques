@@ -93,8 +93,10 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h TTL on subs / 5-min on API — verified from CC docs
+echo "  INFO  claude: prompt cache 10% / 1h TTL subs / 5m API (verified from code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: promptCacheTtl setting (verified from code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  gemini: token caching for API key / Vertex users (verified from GitHub docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -123,6 +125,12 @@ echo "  INFO  claude: /plan is an internal slash command (verified via official 
 echo "  INFO  cursor: /plan is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /plan is an internal slash command (verified from source)"
 echo "  INFO  gemini: /plan is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Side Chats ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw and /side are interactive slash commands (verified via cursor.com/changelog/side-chat)"
+echo "  INFO  codex: /side is an internal slash command (verified from source v0.122.0+)"
 
 echo ""
 echo "--- Ask / Read-Only Mode ---"
@@ -154,12 +162,13 @@ echo ""
 
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
-# Cursor: Built-in subagents (can't test from CLI help)
-echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
+# Cursor: /multitask for async subagents (v3.2+)
+echo "  INFO  cursor: /multitask for async parallel subagents (verified via cursor.com/changelog/04-24-26)"
 # Codex: /agent — internal slash command
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
-# Gemini: /agents — internal slash command
-echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
+# Gemini: /agents + @agent-name — internal commands
+echo "  INFO  gemini: /agents and @agent-name syntax (verified from GitHub docs)"
+echo "  INFO  gemini: built-in agents: codebase_investigator, cli_help, generalist, browser_agent"
 
 echo ""
 echo "--- MCP Management ---"
@@ -203,6 +212,9 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  gemini: contextManagement.historyWindow.maxTokens (verified from GitHub docs)"
+echo "  INFO  gemini: contextManagement.messageLimits settings (verified from GitHub docs)"
+echo "  INFO  gemini: model.compressionThreshold (verified from GitHub docs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -245,12 +257,22 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /summarize replaces /compress (verified via cursor.com/docs/cli/reference/slash-commands)"
+echo "  INFO  cursor: /context is an interactive slash command (verified via cursor.com/docs)"
+echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source v0.142.0+)"
+echo "  INFO  codex: /side is an internal slash command (verified from source v0.122.0+)"
+echo "  INFO  codex: /hooks is an internal slash command (verified from source v0.129.0+)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
-echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+echo "  INFO  gemini: /commands is an internal slash command (verified from source)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
