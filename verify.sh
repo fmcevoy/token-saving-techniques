@@ -92,9 +92,15 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- /rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs — code.claude.com/docs/en/prompt-caching)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, configurable TTL (1h subscription / 5m API) — verified from Anthropic docs
+echo "  INFO  claude: prompt cache 10% / configurable TTL (verified from Anthropic docs — code.claude.com/docs/en/prompt-caching)"
+echo "  INFO  claude: promptCacheTtl setting (verified from official docs)"
+echo "  INFO  claude: subagentPromptCacheTtl setting (verified from official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -129,6 +135,12 @@ echo "--- Ask / Read-Only Mode ---"
 check agent "Cursor --mode=ask" "agent --help" "ask"
 echo "  INFO  cursor: /ask is an interactive slash command (verified in agent CLI)"
 
+echo ""
+echo "--- /btw Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /btw is an internal slash command (verified from source)"
+
 # ============================================================
 # SECTION 03: MODEL ROUTING
 # ============================================================
@@ -155,7 +167,7 @@ echo ""
 echo "--- Subagents ---"
 check claude "CC --agents flag" "command claude --help" "--agents"
 # Cursor: Built-in subagents (can't test from CLI help)
-echo "  INFO  cursor: built-in subagents (no CLI flag to test)"
+echo "  INFO  cursor: built-in subagents and /multitask (no CLI flag to test)"
 # Codex: /agent — internal slash command
 echo "  INFO  codex: /agent is an internal slash command (verified from source)"
 # Gemini: /agents — internal slash command
@@ -179,10 +191,10 @@ check gemini "Gemini skills subcommand" "gemini --help" "skills"
 echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
-echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /effort is an internal slash command — 5 levels: low, medium, high, xhigh, max (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
-echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
+echo "  INFO  codex: /reasoning is an internal slash command (verified from source)"
+echo "  INFO  gemini: /model manage is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Hooks ---"
@@ -198,11 +210,10 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "--- Budget & Compaction Controls ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget"
+echo "  INFO  claude: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE env var (verified from official docs)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -212,6 +223,8 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage now shows cache hit ratio, miss count, likely cause (verified via official docs)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -245,12 +258,19 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  codex: /reasoning is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /multitask is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +278,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
