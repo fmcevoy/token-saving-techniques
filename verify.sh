@@ -94,7 +94,7 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 echo ""
 echo "--- Prompt Cache ---"
 # CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: prompt cache 5-10% / 1h TTL on sub, 5m on API (verified from code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -243,14 +243,35 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- New Flags (Sep 2026) ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+check claude "CC --fallback-model flag" "command claude --help" "fallback-model"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fast is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /schedule is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
 echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source)"
+echo "  INFO  codex: /undo is an internal slash command (verified from source)"
+echo "  INFO  codex: /goal is an internal slash command (verified from source)"
+echo "  INFO  codex: /side is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+echo "  INFO  gemini: /hooks is an internal slash command (verified from source)"
+echo "  INFO  gemini: /commands is an internal slash command (verified from source)"
 echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /context is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /multitask is an interactive slash command (verified in agent CLI)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +279,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
