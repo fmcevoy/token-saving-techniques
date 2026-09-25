@@ -93,8 +93,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input (5% on Opus 5.5), 5-min or 1-hr TTL — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 10% / 5-min or 1-hr TTL (verified from Anthropic pricing docs)"
+echo "  INFO  claude: CLAUDE_CODE_PROMPT_CACHE_TTL (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -180,8 +181,10 @@ echo ""
 echo "--- Thinking Effort ---"
 check claude "CC --effort flag" "command claude --help" "effort"
 echo "  INFO  claude: /effort is an internal slash command (verified via official docs)"
+echo "  INFO  claude: maxEffortLevel setting caps effort org-wide (verified via official docs)"
 echo "  INFO  cursor: /max-mode is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /model (set effort) is an internal slash command (verified from source)"
+echo "  INFO  codex: model_reasoning_effort config (verified from source)"
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
@@ -198,11 +201,12 @@ echo ""
 echo "=== 05: Cost & Limit Management ==="
 echo ""
 
-echo "--- Context Window & Thinking Env Vars ---"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
-echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "--- Context Window & Budget Controls ---"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (30K default, 150K max — verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: --autocompact flag (verified at code.claude.com/docs/en/cli-usage)"
+echo "  INFO  claude: --max-budget-usd flag (verified at code.claude.com/docs/en/cli-usage)"
+echo "  INFO  codex: tool_output_token_limit in config.toml (verified from Codex source)"
+echo "  INFO  codex: model_auto_compact_token_limit in config.toml (verified from Codex source)"
 
 echo ""
 echo "--- Persist Decisions ---"
