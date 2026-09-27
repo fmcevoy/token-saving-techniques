@@ -84,8 +84,8 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize (alias /compress) — interactive slash command
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -171,6 +171,10 @@ check codex "Codex mcp subcommand" "codex mcp --help" "mcp"
 check gemini "Gemini mcp subcommand" "gemini --help" "mcp"
 
 echo ""
+echo "--- Plugins / Extensions ---"
+echo "  INFO  gemini: /extensions is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Skills ---"
 # CC: .claude/skills/*/SKILL.md — project-level
 # Codex: .codex/skills/*/SKILL.md — project-level
@@ -203,6 +207,7 @@ echo "  INFO  claude: CLAUDE_CODE_DISABLE_1M_CONTEXT (verified at code.claude.co
 echo "  INFO  claude: CLAUDE_CODE_AUTO_COMPACT_WINDOW (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: CLAUDE_CODE_DISABLE_ADAPTIVE_THINKING (verified at code.claude.com/docs/en/env-vars)"
 echo "  INFO  claude: MAX_THINKING_TOKENS (verified at code.claude.com/docs/en/env-vars)"
+echo "  INFO  claude: BASH_MAX_OUTPUT_LENGTH (verified at code.claude.com/docs/en/env-vars)"
 
 echo ""
 echo "--- Persist Decisions ---"
@@ -213,7 +218,7 @@ echo ""
 echo "--- Track Spend ---"
 echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /status and /usage are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -245,12 +250,19 @@ check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /skills · /btw · Shift+Tab are internal commands (verified via official docs)"
+echo "  INFO  cursor: /goal · /fork · /rewind are interactive slash commands (verified in agent CLI)"
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /plugin is an interactive slash command (verified in agent CLI)"
+echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
 echo "  INFO  codex: /new is an internal slash command (verified from source)"
 echo "  INFO  codex: /diff is an internal slash command (verified from source)"
-echo "  INFO  codex: /review is an internal slash command (verified from source)"
+echo "  INFO  codex: /worktree is an internal slash command (verified from source)"
+echo "  INFO  codex: /export is an internal slash command (verified from source)"
+echo "  INFO  codex: /usage is an internal slash command (verified from source)"
 echo "  INFO  gemini: /skills is an internal slash command (verified from source)"
-echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /extensions · /rewind · @file are internal commands (verified from source)"
 
 # ============================================================
 # CONFIG FILES (existence checks)
@@ -258,7 +270,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml — codex not installed)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
