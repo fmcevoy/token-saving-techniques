@@ -84,8 +84,8 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+# Cursor: /summarize (alias: /compress) — interactive slash command
+echo "  INFO  cursor: /summarize is an interactive slash command (verified in agent CLI)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
@@ -93,8 +93,9 @@ echo "  INFO  gemini: /compress is an internal slash command (verified from sour
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 5-10% of input, 1h TTL (subscription) / 5-min (API) — verified from Anthropic pricing docs
+echo "  INFO  claude: prompt cache 5-10% / 1h TTL subscription, 5m API (verified from Anthropic pricing docs)"
+echo "  INFO  gemini: automatic token caching for API key & Vertex (verified from gemini-cli docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -211,7 +212,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -243,6 +244,20 @@ check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
 
 echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Side Chats ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /side is an interactive slash command (verified in agent CLI)"
+
+echo ""
+echo "--- Insights ---"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs)"
+
+echo ""
 echo "--- Quick Ref Slash Commands ---"
 echo "  INFO  claude: /context is an internal slash command (verified via official docs)"
 echo "  INFO  codex: /mention is an internal slash command (verified from source)"
@@ -258,7 +273,13 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+# Codex config is optional — only check if codex is installed
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) (codex not found)"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
