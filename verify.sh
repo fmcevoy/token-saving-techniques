@@ -185,6 +185,35 @@ echo "  INFO  codex: /model (set effort) is an internal slash command (verified 
 echo "  INFO  gemini: /model set is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Advisor ---"
+echo "  INFO  claude: /advisor is an internal slash command (verified via official docs)"
+
+echo ""
+echo "--- Autocompact ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+
+echo ""
+echo "--- Doctor ---"
+echo "  INFO  claude: /doctor is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /skill-doctor is an internal slash command (verified via official docs)"
+
+echo ""
+echo "--- Concise Output ---"
+echo "  INFO  claude: outputStyle=Concise setting (verified via official docs)"
+
+echo ""
+echo "--- Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/changelog)"
+echo "  INFO  codex: /side (alias /btw) is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  cursor: /rewind is an interactive slash command (verified via cursor.com/changelog)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Hooks ---"
 echo "  INFO  claude: hooks in settings.json (verified via official docs — code.claude.com/docs/en/hooks)"
 echo "  INFO  cursor: .cursor/hooks.json (verified via cursor.com/docs/hooks)"
@@ -211,9 +240,9 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage and /status are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
 
 echo ""
@@ -258,7 +287,7 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+check_file_optional "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
