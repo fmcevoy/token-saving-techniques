@@ -92,9 +92,20 @@ echo "  INFO  codex: /compact is an internal slash command (verified from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Auto-Compact Threshold ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+
+echo ""
+echo "--- Rewind ---"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /rewind is an interactive slash command (verified in agent CLI)"
+echo "  INFO  gemini: /rewind is an internal slash command (verified from source)"
+
+echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, configurable TTL (5m or 1h) — verified from docs
+echo "  INFO  claude: prompt cache 10% / configurable TTL (verified at code.claude.com/docs/en/prompt-caching)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -171,6 +182,16 @@ check codex "Codex mcp subcommand" "codex mcp --help" "mcp"
 check gemini "Gemini mcp subcommand" "gemini --help" "mcp"
 
 echo ""
+echo "--- Deferred Tool Loading ---"
+echo "  INFO  claude: ENABLE_TOOL_SEARCH=auto (verified at code.claude.com/docs/en/context-window)"
+echo "  INFO  cursor: dynamic tool + MCP loading (verified at cursor.com/blog/improved-token-efficiency)"
+
+echo ""
+echo "--- Smart Model Routing ---"
+echo "  INFO  cursor: Cursor Router (verified at cursor.com/blog/router)"
+echo "  INFO  gemini: Local Gemma model router (verified at github.com/google-gemini/gemini-cli/docs)"
+
+echo ""
 echo "--- Skills ---"
 # CC: .claude/skills/*/SKILL.md — project-level
 # Codex: .codex/skills/*/SKILL.md — project-level
@@ -211,10 +232,16 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /cost and /usage are internal slash commands (verified via official docs)"
+echo "  INFO  claude: /insights for optimization suggestions (verified at code.claude.com/docs/en/costs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
+echo "  INFO  codex: /usage and /status are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+
+echo ""
+echo "--- Token Budget ---"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+echo "  INFO  codex: configurable token budgets with abort thresholds (verified from releases)"
 
 echo ""
 echo "--- Resume ---"
