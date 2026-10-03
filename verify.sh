@@ -81,6 +81,17 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 # Gemini: .geminiignore — project-level
 
 echo ""
+echo "--- Cache Hygiene (new) ---"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+check claude "CC --max-budget-usd flag" "command claude --help" "max-budget-usd"
+echo "  INFO  claude: /rewind is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /skill-doctor is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs)"
+
+echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
