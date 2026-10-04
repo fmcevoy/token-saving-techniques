@@ -84,17 +84,20 @@ echo ""
 echo "--- Compact / Summarize ---"
 # CC: /compact — internal slash command (confirmed in CC docs)
 echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
-# Cursor: /compress — interactive slash command
-echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs)"
+# Cursor: /summarize (aliases: /compress, /compact) — renamed May 2026
+echo "  INFO  cursor: /summarize is an interactive slash command (aliases: /compress, /compact)"
 # Codex: /compact — internal slash command (confirmed from source)
 echo "  INFO  codex: /compact is an internal slash command (verified from source)"
-# Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
+# Gemini: /compress — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Prompt Cache ---"
-# CC: 10% of input, 5-min TTL — verified from Anthropic pricing docs
-echo "  INFO  claude: prompt cache 10% / 5-min TTL (verified from Anthropic pricing docs)"
+# CC: 10% of input, 1h/5m TTL depending on billing — verified from code.claude.com/docs/en/prompt-caching
+echo "  INFO  claude: prompt cache 10% / 1h (subscription) or 5m (API/credits) TTL (verified from official docs)"
+echo "  INFO  claude: promptCacheTtl and subagentPromptCacheTtl settings (verified from official docs)"
 
 echo ""
 echo "--- Completion Sounds ---"
@@ -162,6 +165,20 @@ echo "  INFO  codex: /agent is an internal slash command (verified from source)"
 echo "  INFO  gemini: /agents is an internal slash command (verified from source)"
 
 echo ""
+echo "--- Deferred Tool Loading ---"
+echo "  INFO  claude: ENABLE_TOOL_SEARCH env var (verified via official docs — code.claude.com/docs/en/context-window)"
+echo "  INFO  cursor: dynamic tool loading (verified via cursor.com/blog/improved-token-efficiency)"
+
+echo ""
+echo "--- /btw Side Questions ---"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  cursor: /btw is an interactive slash command (verified via cursor.com/changelog/04-14-26)"
+
+echo ""
+echo "--- Subagent Model Routing ---"
+echo "  INFO  claude: CLAUDE_CODE_SUBAGENT_MODEL env var (verified via official docs — code.claude.com/docs/en/sub-agents)"
+
+echo ""
 echo "--- MCP Management ---"
 check agent "Cursor mcp enable" "agent mcp --help" "enable"
 check agent "Cursor mcp disable" "agent mcp --help" "disable"
@@ -211,10 +228,12 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage is an internal slash command (verified via official docs — code.claude.com/docs/en/costs)"
+echo "  INFO  claude: /insights is an internal slash command (verified via official docs — code.claude.com/docs/en/costs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
-echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
-echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
+echo "  INFO  cursor: /context is an interactive slash command (verified via cursor.com/docs/cli/changelog)"
+echo "  INFO  codex: /usage is an internal slash command (verified from changelog)"
+echo "  INFO  gemini: /stats model is an internal slash command (verified from source)"
 
 echo ""
 echo "--- Resume ---"
@@ -258,7 +277,12 @@ echo "  INFO  cursor: /mcp is an interactive slash command (verified in agent CL
 echo ""
 echo "=== Config Files ==="
 check_file "CC global config (~/.claude.json)" "$HOME/.claude.json"
-check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+if command -v codex &>/dev/null; then
+  check_file "Codex config (~/.codex/config.toml)" "$HOME/.codex/config.toml"
+else
+  echo "  SKIP  file: Codex config (~/.codex/config.toml) — codex not installed"
+  ((SKIP++))
+fi
 # Project-level files are optional — just note them
 check_file_optional "CLAUDE.md" "./CLAUDE.md"
 check_file_optional ".cursorignore" "./.cursorignore"
