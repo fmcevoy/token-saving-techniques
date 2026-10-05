@@ -82,12 +82,13 @@ check codex "Codex sandbox policy" "codex --help" "sandbox"
 
 echo ""
 echo "--- Compact / Summarize ---"
-# CC: /compact — internal slash command (confirmed in CC docs)
-echo "  INFO  claude: /compact is an internal slash command (verified via official docs)"
+# CC: /compact [instructions] — internal slash command (confirmed in CC docs)
+echo "  INFO  claude: /compact [instructions] is an internal slash command (verified via official docs)"
+check claude "CC --autocompact flag" "command claude --help" "autocompact"
 # Cursor: /compress — interactive slash command
 echo "  INFO  cursor: /compress is an interactive slash command (verified in agent CLI)"
-# Codex: /compact — internal slash command (confirmed from source)
-echo "  INFO  codex: /compact is an internal slash command (verified from source)"
+# Codex: /compact [instructions] — internal slash command (confirmed from source)
+echo "  INFO  codex: /compact [instructions] is an internal slash command (verified from source)"
 # Gemini: /compress (aliases: /compact, /summarize) — confirmed from source
 echo "  INFO  gemini: /compress is an internal slash command (verified from source)"
 
@@ -211,7 +212,7 @@ echo "  INFO  gemini: /memory add is an internal slash command (verified from so
 
 echo ""
 echo "--- Track Spend ---"
-echo "  INFO  claude: /cost is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /usage (aliases: /cost, /stats) is an internal slash command (verified via official docs)"
 echo "  INFO  cursor: /usage is an interactive slash command (verified in agent CLI)"
 echo "  INFO  codex: /status and /statusline are internal slash commands (verified from source)"
 echo "  INFO  gemini: /stats is an internal slash command (verified from source)"
@@ -241,6 +242,15 @@ echo "--- Worktrees ---"
 check claude "CC --worktree flag" "command claude --help" "--worktree"
 check agent "Cursor --worktree flag" "agent --help" "--worktree"
 check gemini "Gemini --worktree flag" "gemini --help" "--worktree"
+
+echo ""
+echo "--- New CC Commands ---"
+echo "  INFO  claude: /output-style is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /fork is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /doctor prompt-audit is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /btw is an internal slash command (verified via official docs)"
+echo "  INFO  claude: /autocompact is an internal slash command (verified via official docs + --help)"
+echo "  INFO  claude: opusplan model alias (verified via official docs)"
 
 echo ""
 echo "--- Quick Ref Slash Commands ---"
